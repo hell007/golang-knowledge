@@ -1,3 +1,10 @@
+/*
+array
+slice
+切片追加 append
+切片内存优化  copy
+*/
+
 package main
 
 import (
