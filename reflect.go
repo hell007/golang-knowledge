@@ -33,4 +33,12 @@ func main() {
 	b.FieldByName("Time").SetInt(time.Now().Unix())
 	fmt.Println("====", a)
 
+	//save
+	admin := Admin{}
+	admin.Id = 2000
+
+	fmt.Println("admin===", admin)
+
+	//页面的接收
+
 }
