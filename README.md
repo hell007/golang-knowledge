@@ -24,10 +24,10 @@
 
 需要在 go-xorm/ 
 
-  git clone https://github.com/go-xorm/xorm.git
-  git clone https://github.com/go-xorm/builder.git
-  git clone https://github.com/go-xorm/core.git
-  git clone https://github.com/go-xorm/cmd.git
+      git clone https://github.com/go-xorm/xorm.git
+      git clone https://github.com/go-xorm/builder.git
+      git clone https://github.com/go-xorm/core.git
+      git clone https://github.com/go-xorm/cmd.git
 
 - 关于 xorm
 
