@@ -85,28 +85,52 @@ func main() {
 
 	x.SetMapper(core.SameMapper{}) // 设置表名下划线转驼峰
 
-	x.Sync2(new(Userinfo))
+	//x.Sync2(new(Userinfo))
 
 	// 1.查询
-	fmt.Println("\n struct查询")
-	info := getinfo(8)
-	fmt.Println("select = ", info, "\n")
+	fmt.Println("\n查询")
 
-	//var username string
-	id := 8
-	is1, _ := x.Where("uid = ?", 8).Cols("username").Get(&id)
-	fmt.Println("查询成功 is1= ", is1, "\n")
+	// Query 最原始的也支持SQL语句查询，返回的结果类型为 []map[string][]byte
+	// QueryString 返回 []map[string]string
+	// QueryInterface 返回 []map[string]interface{}
 
-	//
-	uid := 8
-	is2, _ := x.SQL("select username from userinfo").Get(&uid)
-	fmt.Println("查询成功 is2=", is2, "\n")
+	q1, _ := x.Query("select * from userinfo")
+	fmt.Println("Query q1= ", q1, "\n")
 
-	data1, _ := x.Query("select * from userinfo")
-	fmt.Println(" data1 = ", data1, "\n")
+	q2, _ := x.QueryString("select username from userinfo where uid=8")
+	fmt.Println("Query q2= ", q2, "\n")
 
-	data2, _ := x.QueryString("select * from userinfo")
-	fmt.Println(" data2 = ", data2, "\n")
+	q3, _ := x.QueryInterface("select * from userinfo")
+	fmt.Println("Query q3= ", q3, "\n")
+
+	// 单条记录
+	uinfo := new(Userinfo)
+
+	// q4, _ := x.Get(uinfo)
+	// fmt.Println("Get q4= ", q4, "\n")
+
+	q5, _ := x.Where("username = ?", "曹操").Desc("uid").Get(uinfo)
+	fmt.Println("Get q5= ", q5, "\n")
+
+	var username string
+	q6, _ := x.Table("userinfo").Where("uid = ?", 8).Cols("username").Get(&username)
+	fmt.Println("Get q6= ", q6, "\n")
+
+	q7, _ := x.SQL("select username from userinfo").Get(&username)
+	fmt.Println("Get q7= ", q7, "\n")
+
+	var valuesMap = make(map[string]string)
+	q8, _ := x.Table("userinfo").Where("uid = ?", 8).Get(&valuesMap)
+	fmt.Println("Get q8= ", q8, "\n")
+
+	// cols := {}
+	// var valuesSlice = make([]interface{}, len(cols))
+	// q9, _ := x.Table("userinfo").Where("uid = ?", 8).Cols(cols...).Get(&valuesSlice)
+	// fmt.Println("Get q9= ", q9, "\n")
+
+	// fmt.Println("\n struct查询")
+	// info := getinfo(8)
+	// fmt.Println("select = ", info, "\n")
 
 	// 2.添加
 	fmt.Println("\n添加")
