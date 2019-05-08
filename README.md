@@ -65,11 +65,20 @@ go get github.com/go-xorm/xorm
     
 这时在此目录了下生成xorm.exe文件
 
+goxorm配置
+
+config
+    
+    lang=go
+    genJson=1
+    prefix=jie_ //重要
+
+
 接下来开始执行
 
-    ./xorm reverse mysql root:password@test?charset=utf8 ./templates/goxorm
+    ./xorm reverse mysql root:admin@/jie?charset=utf8 ./templates/goxorm
 
-??? 为毛没生成
+在/xorm/models/下生成
 
 ## rpc
 
