@@ -6,28 +6,29 @@
 
 1. 使用命令 需要git的支持
 
-    go get ...
-    go install ...
+        go get ...
+        go install ...
 
 2.手动安装
+
   github上下载安装包，复制到 github.com/目录下
   
-  go install ... 
+    go install ... 
   
-#### mysql驱动
+#### - mysql驱动
 
 [go-sql-driver](https://github.com/go-sql-drive/mysql)
 
-#### orm操作数据库
+#### - orm操作数据库
 
 [go-xorm](https://github.com/go-xorm/xorm)
 
 需要在 go-xorm/ 
 
-  git clone https://github.com/go-xorm/xorm.git
-  git clone https://github.com/go-xorm/builder.git
-  git clone https://github.com/go-xorm/core.git
-  git clone https://github.com/go-xorm/cmd.git
+      git clone https://github.com/go-xorm/xorm.git
+      git clone https://github.com/go-xorm/builder.git
+      git clone https://github.com/go-xorm/core.git
+      git clone https://github.com/go-xorm/cmd.git
 
 - 关于 xorm
 
