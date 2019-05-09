@@ -132,6 +132,14 @@ func main() {
 	// info := getinfo(8)
 	// fmt.Println("select = ", info, "\n")
 
+	// 多条记录
+	// var users []UserDetail
+	// err := x.Table("user").Select("user.*, detail.*")
+	// Join("INNER", "detail", "detail.user_id = user.id").
+	// 	Where("user.name = ?", name).Limit(10, 0).
+	// 	Find(&users)
+	// SELECT user.*, detail.* FROM user INNER JOIN detail WHERE user.name = ? limit 10 offset 0
+
 	// 2.添加
 	fmt.Println("\n添加")
 
@@ -140,6 +148,20 @@ func main() {
 	// u1.Department = "财务部"
 	// u1.Created = time.Now()
 	//Insert(u1)
+
+	// 批量添加
+	// u2 := new(Userinfo)
+	// u2.Username = "曹丕22"
+	// u2.Department = "财务部"
+	// u2.Created = time.Now()
+
+	// u3 := new(Userinfo)
+	// u3.Username = "曹丕33"
+	// u3.Department = "财务部"
+	// u3.Created = time.Now()
+
+	// row, _ := x.Insert(u2, u3)
+	// fmt.Println(" row = ", row)
 
 	// 3.更改
 	fmt.Println("\n更改")
