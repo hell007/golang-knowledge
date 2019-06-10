@@ -27,5 +27,8 @@ import "time"
 const SysTimeform string = "2019-06-04 10:00:00"
 const SysTimeformShort string = "2019-06-04"
 
+// 数据库
+const SysShowSQL bool = true
+
 // 中国时区
 var SysTimeLocation, _ = time.LoadLocation("Asia/Chongqing")

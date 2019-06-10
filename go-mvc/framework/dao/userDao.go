@@ -8,7 +8,8 @@
 package dao
 
 import (
-	"github.com/go-xorm/core"
+	//"fmt"
+	//"github.com/go-xorm/core"
 	"github.com/go-xorm/xorm"
 
 	"../models"
@@ -21,9 +22,8 @@ type UserDao struct {
 
 func NewUserDao(engine *xorm.Engine) *UserDao {
 
-	tbMapper := core.NewPrefixMapper(core.SnakeMapper{}, "jie_")
-	engine.SetTableMapper(tbMapper)
-	engine.ShowSQL(true)
+	// tbMapper := core.NewPrefixMapper(core.SnakeMapper{}, "jie_")
+	// engine.SetTableMapper(tbMapper)
 
 	return &UserDao{
 		engine: engine,

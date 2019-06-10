@@ -8,7 +8,7 @@
 package controllers
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
 	"time"
@@ -113,7 +113,7 @@ func (c *UserController) GetDelete() {
 	if rows <= 0 || err != nil {
 		result.State = false
 		result.Message = "fail"
-		c.Ctx.Application().Logger().Errorf("userController GetDelete:", err.Error())
+		c.Ctx.Application().Logger().Errorf("userController GetDelete:", err)
 	} else {
 		result.Message = "ok"
 		result.State = true
