@@ -72,6 +72,11 @@ func (d *UserDao) Get(id int) *models.User {
 	}
 }
 
+// GetUserByName
+func (d *UserDao) GetUserByName(user *models.User) (bool, error) {
+	return d.engine.Get(user)
+}
+
 // update
 func (d *UserDao) Update(data *models.User, columns []string) (int64, error) {
 	rows, err := d.engine.Id(data.Id).MustCols(columns...).Update(data)

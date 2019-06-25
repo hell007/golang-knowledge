@@ -18,6 +18,7 @@ type UserService interface {
 	GetAll() []models.User
 	List(name string, p *page.Pagination) ([]models.User, int64, error)
 	Get(id int) *models.User
+	GetUserByName(user *models.User) (bool, error)
 	Delete(id int) (int64, error)
 	Update(user *models.User, columns []string) (int64, error)
 	Create(user *models.User) (int64, error)
@@ -43,6 +44,10 @@ func (s *userService) List(name string, p *page.Pagination) ([]models.User, int6
 
 func (s *userService) Get(id int) *models.User {
 	return s.dao.Get(id)
+}
+
+func (s *userService) GetUserByName(user *models.User) (bool, error) {
+	return s.dao.GetUserByName(user)
 }
 
 func (s *userService) Update(user *models.User, columns []string) (int64, error) {

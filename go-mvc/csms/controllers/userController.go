@@ -9,14 +9,19 @@ package controllers
 
 import (
 	//"fmt"
+	"time"
+
+	"github.com/kataras/golog"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
-	"time"
+
+	"../middleware/jwt"
 
 	"../../framework/models"
 	"../../framework/services"
+	//"../../framework/utils/encrypt"
 	"../../framework/utils/page"
-	"../../framework/utils/result"
+	"../../framework/utils/response"
 )
 
 type UserController struct {
@@ -24,7 +29,7 @@ type UserController struct {
 	Service services.UserService
 }
 
-// /user
+// user
 func (c *UserController) Get() mvc.Result {
 	datalist := c.Service.GetAll()
 
@@ -39,85 +44,126 @@ func (c *UserController) Get() mvc.Result {
 	}
 }
 
-// /user/list?pageNumber=1&pageSize=2&name=曹操
+// user/login
+func (c *UserController) PostLogin() {
+	user := new(models.User)
+	if err := c.Ctx.ReadJSON(&user); err != nil {
+		c.Ctx.Application().Logger().Errorf("用户[%s]登录失败。%s", "", err.Error())
+		response.Error(c.Ctx, iris.StatusBadRequest, response.LoginFailur, nil)
+		return
+	}
+
+	mUser := new(models.User)
+	mUser.Name = user.Name
+	has, err := c.Service.GetUserByName(mUser)
+	if err != nil {
+		c.Ctx.Application().Logger().Errorf("用户[%s]登录失败。%s", user.Name, err.Error())
+		response.Error(c.Ctx, iris.StatusInternalServerError, response.LoginFailur, nil)
+		return
+	}
+
+	// 用户名不正确
+	if !has {
+		response.Unauthorized(c.Ctx, response.UsernameFailur, nil)
+		return
+	}
+
+	// 验证密码
+	//ckPassword := encrypt.CheckPWD(user.Password, mUser.Password)
+	//if !ckPassword {
+
+	if user.Password != mUser.Password {
+		response.Unauthorized(c.Ctx, response.PasswordFailur, nil)
+		return
+	}
+
+	// 生成token
+	token, err := jwt.GenerateToken(mUser)
+	golog.Infof("用户[%s], 登录生成token [%s]", mUser.Name, token)
+	if err != nil {
+		c.Ctx.Application().Logger().Errorf("用户[%s]登录，生成token出错。%s", user.Name, err.Error())
+		response.Error(c.Ctx, iris.StatusInternalServerError, response.TokenCreateFailur, nil)
+		return
+	}
+
+	mUser.Token = token
+	//mUser.Password = ""
+	//mUser.Salt = ""
+	response.Ok(c.Ctx, response.LoginSuccess, mUser)
+}
+
+// user/list?pageNumber=1&pageSize=2&name=曹操
 func (c *UserController) GetList() {
 	name := c.Ctx.URLParam("name")
 	p, _ := page.NewPagination(c.Ctx)
 	list, total, err := c.Service.List(name, p)
-	result := result.Result{}
 	res := page.Result{}
 
-	if err == nil {
-		res.Total = total
-		res.Rows = list
-		result.State = true
-		result.Message = "ok"
-		result.Data = res
-	} else {
-		result.State = false
-		result.Message = "fail"
-		c.Ctx.Application().Logger().Errorf("userController GetList:", err.Error())
+	if err != nil {
+		c.Ctx.Application().Logger().Errorf("UserController GetList失败。", err.Error())
+		response.Error(c.Ctx, iris.StatusInternalServerError, response.OptionFailur, nil)
+		return
 	}
-	c.Ctx.JSON(result)
+
+	res.Total = total
+	res.Rows = list
+	response.Ok(c.Ctx, response.OptionSuccess, res)
 }
 
-// /user/item?id=1
+// user/item?id=1
 func (c *UserController) GetItem() {
 	id, _ := c.Ctx.URLParamInt("id")
-	result := result.Result{}
 	user := c.Service.Get(id)
 
 	if user != nil {
-		result.Data = user
-		result.Message = "ok"
-		result.State = true
+		response.Ok(c.Ctx, response.OptionSuccess, user)
+		return
 	} else {
-		result.State = false
-		result.Message = "fail"
-		c.Ctx.Application().Logger().Errorf("userController GetItem:", user)
+		c.Ctx.Application().Logger().Errorf("UserController GetItem失败。%s", user)
+		response.Error(c.Ctx, iris.StatusInternalServerError, response.OptionFailur, nil)
+		return
 	}
-	c.Ctx.JSON(result)
 }
 
-// /user/save
+// user/save
 func (c *UserController) PostSave() {
 	user := models.User{}
-	result := result.Result{}
 
 	if err := c.Ctx.ReadJSON(&user); err != nil {
-		//fmt.Printf("1-->%v\n", err)
-		c.Ctx.Application().Logger().Errorf("userController PostSave:", err.Error())
+		c.Ctx.Application().Logger().Errorf("UserController PostSave失败。", err.Error())
+		response.Error(c.Ctx, iris.StatusBadRequest, response.OptionFailur, nil)
+		return
 	}
 
 	user.CreateTime = time.Now()
 	rows, err2 := c.Service.Create(&user)
 
 	if rows <= 0 || err2 != nil {
-		result.State = false
-		result.Message = "fail"
-		c.Ctx.Application().Logger().Errorf("userController PostSave:", err2.Error())
-	} else {
-		result.Message = "ok"
-		result.State = true
+		c.Ctx.Application().Logger().Errorf("UserController PostSave失败。", err2.Error())
+		response.Error(c.Ctx, iris.StatusBadRequest, response.OptionFailur, nil)
+		return
 	}
 
-	c.Ctx.JSON(result)
+	response.Ok(c.Ctx, response.OptionSuccess, nil)
 }
 
-// /user/delete?id=1
-func (c *UserController) GetDelete() {
-	id, _ := c.Ctx.URLParamInt("id")
-	result := result.Result{}
-	rows, err := c.Service.Delete(id)
+// user/delete
+func (c *UserController) PostDelete() {
+	user := models.User{}
 
-	if rows <= 0 || err != nil {
-		result.State = false
-		result.Message = "fail"
-		c.Ctx.Application().Logger().Errorf("userController GetDelete:", err)
-	} else {
-		result.Message = "ok"
-		result.State = true
+	if err := c.Ctx.ReadJSON(&user); err != nil {
+		c.Ctx.Application().Logger().Errorf("UserController PostDelete失败。", err.Error())
+		response.Error(c.Ctx, iris.StatusBadRequest, response.OptionFailur, nil)
+		return
 	}
 
-	c.Ctx.JSON(result)
+	rows, err := c.Service.Delete(user.Id)
+
+	if rows <= 0 || err != nil {
+		c.Ctx.Application().Logger().Errorf("UserController GetDelete失败。", err.Error())
+		response.Error(c.Ctx, iris.StatusBadRequest, response.OptionFailur, nil)
+		return
+	}
+
+	response.Ok(c.Ctx, response.OptionSuccess, nil)
 }

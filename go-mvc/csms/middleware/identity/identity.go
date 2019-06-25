@@ -1,6 +1,7 @@
 package identity
 
 import (
+	"fmt"
 	"github.com/kataras/iris"
 	"time"
 
@@ -16,7 +17,7 @@ func New(b *bootstrap.Bootstrapper) iris.Handler {
 		ctx.Header("App-Owner", b.AppOwner)
 		ctx.Header("App-Since", time.Since(b.AppSpawnDate).String())
 
-		ctx.Header("Server", "Iris: https://iris-go.com")
+		ctx.Header("Server", "http://127.0.0.1:3000/")
 
 		// view data if ctx.View or c.Tmpl = "$page.html" will be called next.
 		ctx.ViewData("AppName", b.AppName)
@@ -27,6 +28,7 @@ func New(b *bootstrap.Bootstrapper) iris.Handler {
 
 // Configure creates a new identity middleware and registers that to the app.
 func Configure(b *bootstrap.Bootstrapper) {
+	fmt.Println("identity:==>定义header头")
 	h := New(b)
 	b.UseGlobal(h)
 }

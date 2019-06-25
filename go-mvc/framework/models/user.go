@@ -10,6 +10,7 @@ type User struct {
 	Name       string    `json:"name" xorm:"not null comment('系统用户') unique VARCHAR(20)"`
 	Password   string    `json:"password" xorm:"not null comment('密码') CHAR(32)"`
 	Salt       string    `json:"salt" xorm:"comment('盐值') VARCHAR(64)"`
+	Token      string    `json:"token" xorm:"comment('用户token') VARCHAR(200)"`
 	Email      string    `json:"email" xorm:"comment('邮箱') unique VARCHAR(50)"`
 	Mobile     string    `json:"mobile" xorm:"not null comment('手机号码') unique VARCHAR(11)"`
 	Ip         string    `json:"ip" xorm:"comment('登录ip') VARCHAR(20)"`

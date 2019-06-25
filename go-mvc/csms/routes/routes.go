@@ -8,32 +8,52 @@
 package routes
 
 import (
+	"fmt"
+	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
 
 	"../../framework/bootstrap"
 	"../../framework/services"
 	"../controllers"
-	//"../middleware"
+	"../middleware"
+	"../middleware/cors"
 )
 
 // Configure: registers the necessary routes to the app.
-func Configure(b *bootstrap.Bootstrapper) {
-	userService := services.NewUserService()
 
-	user := mvc.New(b.Party("/user"))
-	//user.Router.Use(middleware.BasicAuth)
+func Configure(b *bootstrap.Bootstrapper) {
+
+	fmt.Println("routes:==>定义路由")
+
+	/* 定义路由 */
+	main := b.Party("/", cors.Mycors()).AllowMethods(iris.MethodOptions)
+	main.Use(middleware.ServeHTTP)
+
+	// 首页模块
+	home := main.Party("/")
+	home.Get("/", func(ctx iris.Context) {
+		ctx.View("index.html")
+	})
+
+	// 用户API模块
+	user := mvc.New(main.Party("/user"))
+	userService := services.NewUserService()
 	user.Register(userService)
 	user.Handle(new(controllers.UserController))
 
-	home := mvc.New(b.Party("/home"))
-	home.Handle(new(controllers.HomeController))
-
-	// b.Get("/", function(ctx iris.Context){
-	///ctx.ViewData("Title", "Index Page")
-	//ctx.View("index.html")
-	// })
-
-	//b.Get("/follower/{id:long}", GetFollowerHandler)
-	//b.Get("/following/{id:long}", GetFollowingHandler)
-	//b.Get("/like/{id:long}", GetLikeHandler)
 }
+
+// mvc 模式
+// func Configure(b *bootstrap.Bootstrapper) {
+// 	userService := services.NewUserService()
+
+// 	user := mvc.New(b.Party("/user"))
+// 	user.Router.Use(middleware.BasicAuth)
+// 	user.Register(userService)
+// 	user.Handle(new(controllers.UserController))
+
+// 	home := mvc.New(b.Party("/home"))
+// 	home.Handle(new(controllers.HomeController))
+
+// 	//b.Get("/follower/{id:long}", GetFollowerHandler)
+// }
