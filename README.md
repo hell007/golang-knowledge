@@ -99,6 +99,12 @@ config
 
 [从 PHP Laravel 到 Go Iris--路由篇](https://learnku.com/articles/6020/from-php-laravel-to-go-iris-routing)
 
+### 2、Casbin
+
+[casbin](https://github.com/casbin/casbin)
+
+[Iris + Casbin 权限控制实战](http://zxc0328.github.io/2018/05/14/casbin-iris/?utm_source=tuicool&utm_medium=referral)
+
 
 ## rpc
 
