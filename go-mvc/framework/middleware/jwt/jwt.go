@@ -12,9 +12,9 @@ import (
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/context"
 
-	"../../../framework/models"
-	"../../../framework/utils/response"
-	//"go-iris/inits/parse"
+	"../../conf"
+	"../../models"
+	"../../utils/response"
 )
 
 type (
@@ -77,8 +77,7 @@ func ConfigJWT() {
 		//这个方法将验证jwt的token
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 			//自己加密的秘钥或者说盐值
-			//return []byte(parse.O.Secret), nil
-			return []byte("xxx-Secret"), nil
+			return []byte(conf.SysSecret), nil
 		},
 		//设置后，中间件会验证令牌是否使用特定的签名算法进行签名
 		//如果签名方法不是常量，则可以使用ValidationKeyGetter回调来实现其他检查
@@ -181,7 +180,7 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 // 断言
 type Claims struct {
 	Id   int    `json:"id"`
-	name string `json:"name"`
+	Name string `json:"name"`
 	//Password string `json:"password"`
 	//User models.User `json:"user"`
 	jwt.StandardClaims
@@ -203,8 +202,7 @@ func GenerateToken(user *models.User) (string, error) {
 	}
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	//token, err := tokenClaims.SignedString([]byte(parse.O.Secret))
-	token, err := tokenClaims.SignedString([]byte("xxx-Secret"))
+	token, err := tokenClaims.SignedString([]byte(conf.SysSecret))
 	return token, err
 }
 

@@ -45,14 +45,14 @@ func InstanceMaster() *xorm.Engine {
 	}
 
 	// Debug模式，打印全部的SQL语句，帮助对比，看ORM与SQL执行的对照关系
-	engine.ShowSQL(conf.SysShowSQL)
+	engine.ShowSQL(conf.ShowSQL)
 	tbMapper := core.NewPrefixMapper(core.SnakeMapper{}, "jie_")
 	engine.SetTableMapper(tbMapper)
 	engine.SetTZLocation(conf.SysTimeLocation)
 
 	// 性能优化的时候才考虑，加上本机的SQL缓存
-	cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
-	engine.SetDefaultCacher(cacher)
+	//cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
+	//engine.SetDefaultCacher(cacher)
 
 	masterEngine = engine
 	return engine

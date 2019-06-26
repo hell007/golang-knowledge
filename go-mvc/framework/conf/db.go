@@ -7,7 +7,11 @@
 
 package conf
 
-const DriverName = "mysql"
+// 数据库
+const (
+	DriverName string = "mysql"
+	ShowSQL    bool   = true
+)
 
 type DbConf struct {
 	Host   string

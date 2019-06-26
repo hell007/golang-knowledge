@@ -23,12 +23,30 @@ import "time"
 您看出规律了么！哦是的，你发现了，这里面没有一个是重复的，所有的值表示都唯一对应一个时间部分。
 并且涵盖了很多格式组合。
 */
-// 时间格式化字符串
-const SysTimeform string = "2019-06-04 10:00:00"
-const SysTimeformShort string = "2019-06-04"
 
-// 数据库
-const SysShowSQL bool = true
+// 时间格式化字符串
+const (
+	SysTimeform      string = "2019-06-04 10:00:00"
+	SysTimeformShort string = "2019-06-04"
+)
+
+// 系统设置
+const (
+	SysSecret string = "jie-Secret"
+)
+
+// auth
+var AuthIgnores = []string{"/", "/user/login"}
+
+// log
+const (
+	LogLevel string = "debug"
+)
+
+// jwt
+const (
+	JWTTimeout int = 900 //second
+)
 
 // 中国时区
 var SysTimeLocation, _ = time.LoadLocation("Asia/Chongqing")

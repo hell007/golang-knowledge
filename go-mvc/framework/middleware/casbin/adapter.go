@@ -9,7 +9,7 @@ import (
 	"github.com/go-xorm/xorm"
 	"github.com/lib/pq"
 
-	"../../../framework/models"
+	"../../models"
 )
 
 // Adapter represents the Xorm adapter for policy storage.

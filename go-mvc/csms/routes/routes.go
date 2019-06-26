@@ -13,14 +13,15 @@ import (
 	"github.com/kataras/iris/mvc"
 
 	"../../framework/bootstrap"
+	"../../framework/middleware"
+	"../../framework/middleware/cors"
 	"../../framework/services"
 	"../controllers"
-	"../middleware"
-	"../middleware/cors"
 )
 
 // Configure: registers the necessary routes to the app.
 
+// api
 func Configure(b *bootstrap.Bootstrapper) {
 
 	fmt.Println("routes:==>定义路由")

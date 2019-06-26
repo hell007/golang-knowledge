@@ -1,18 +1,17 @@
 package middleware
 
 import (
-	//"./casbin"
-	"./jwt"
-	"fmt"
 	"strings"
 
 	"github.com/kataras/iris/context"
+
+	//"./casbin"
+	"../conf"
+	"./jwt"
 )
 
 func ServeHTTP(ctx context.Context) {
 	path := ctx.Path()
-
-	fmt.Println("path=====>" + path)
 
 	// 过滤静态资源、login接口、首页等...不需要验证
 	if checkURL(path) || strings.Contains(path, "/assets") {
@@ -47,9 +46,7 @@ func checkURL(reqPath string) bool {
 	// config := iris.YAML("../../framework/conf/app.yml")
 	// ignoreURLs := config.GetOther()["ignoreURLs"].([]interface{})
 
-	IgnoreURLs := []string{"/", "/user/login"}
-
-	for _, v := range IgnoreURLs {
+	for _, v := range conf.AuthIgnores {
 		if reqPath == v {
 			return true
 		}

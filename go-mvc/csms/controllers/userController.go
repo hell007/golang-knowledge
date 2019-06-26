@@ -13,10 +13,8 @@ import (
 
 	"github.com/kataras/golog"
 	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
 
-	"../middleware/jwt"
-
+	"../../framework/middleware/jwt"
 	"../../framework/models"
 	"../../framework/services"
 	//"../../framework/utils/encrypt"
@@ -29,19 +27,13 @@ type UserController struct {
 	Service services.UserService
 }
 
-// user
-func (c *UserController) Get() mvc.Result {
-	datalist := c.Service.GetAll()
-
-	return mvc.View{
-		Name: "index.html",
-		Data: iris.Map{
-			"Title":    "用户管理",
-			"Base":     "http://127.0.0.1:3000/",
-			"Datalist": datalist,
-		},
-		//Layout: "layout.html",
-	}
+type UserToken struct {
+	Id     int    `json:"id"`
+	Name   string `json:"name"`
+	Email  string `json:"email"`
+	Mobile string `json:"moblie"`
+	RoleId int    `json:"roleId"`
+	Token  string `json:"token"`
 }
 
 // user/login
@@ -86,10 +78,8 @@ func (c *UserController) PostLogin() {
 		return
 	}
 
-	mUser.Token = token
-	//mUser.Password = ""
-	//mUser.Salt = ""
-	response.Ok(c.Ctx, response.LoginSuccess, mUser)
+	ut := UserToken{mUser.Id, mUser.Name, mUser.Email, mUser.Mobile, mUser.RoleId, token}
+	response.Ok(c.Ctx, response.LoginSuccess, ut)
 }
 
 // user/list?pageNumber=1&pageSize=2&name=曹操

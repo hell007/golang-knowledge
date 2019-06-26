@@ -12,11 +12,11 @@ import (
 	//cm "github.com/iris-contrib/middleware/casbin"
 	"github.com/kataras/iris/context"
 
-	"../../../framework/bootstrap"
+	"../../bootstrap"
 	//"go-iris/middleware/jwts"
 	//"go-iris/inits/parse"
 	//db "../../../framework/utils/datasource"
-	"../../../framework/utils/response"
+	"../../utils/response"
 )
 
 var (

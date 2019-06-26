@@ -39,6 +39,7 @@
   <th>姓名</th>
   <th>邮箱</th>
   <th>手机号</th>
+  <th>时间</th>
   <th>操作</th>
 </tr>
 </thead>
@@ -99,12 +100,13 @@ $(function(){
       success: function(res) {     
         console.log(res)
         let tpl = ''
-        for (const item of res.data.Rows) {
+        for (const item of res.data.rows) {
           tpl +=  `<tr data-id="${item.id}">
             <th scope="row">${item.id}</th>
             <td>${item.name}</td>
             <td>${item.email}</td>
             <td>${item.mobile}</td>
+            <td>${item.createTime}</td>
             <td>
               <button type="button" id="js-edit">查看</button>
               <button type="button" id="js-delete">删除</button>
@@ -133,7 +135,6 @@ $(function(){
 			Mobile: '13888555888',
 			IsSuper: 1,
 			Status: 1,
-			CreateTime: '2019-06-07 08:00:00'
 		}
 
 		$.ajax({

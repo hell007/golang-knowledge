@@ -7,8 +7,8 @@ import (
 
 // 分页结果集
 type Result struct {
-	Total int64       `json:"Total"`
-	Rows  interface{} `json:"Rows,omitempty"`
+	Total int64       `json:"total"`
+	Rows  interface{} `json:"rows,omitempty"`
 }
 
 // 分页参数

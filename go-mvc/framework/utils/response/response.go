@@ -6,10 +6,10 @@ import (
 
 const (
 	// key定义
-	//STATE bool   = "state"
-	CODE string = "code"
-	MSG  string = "msg"
-	DATA string = "data"
+	CODE  string = "code"
+	STATE string = "state"
+	MSG   string = "msg"
+	DATA  string = "data"
 
 	// msg define
 	Success                  = "恭喜, 成功"
@@ -53,9 +53,10 @@ func Ok_(ctx iris.Context, msg string) {
 func Ok(ctx iris.Context, msg string, data interface{}) {
 	ctx.StatusCode(iris.StatusOK)
 	ctx.JSON(iris.Map{
-		CODE: iris.StatusOK,
-		MSG:  msg,
-		DATA: data,
+		CODE:  iris.StatusOK,
+		STATE: true,
+		MSG:   msg,
+		DATA:  data,
 	})
 }
 
@@ -75,8 +76,9 @@ func Unauthorized(ctx iris.Context, msg string, data interface{}) {
 func Error(ctx iris.Context, status int, msg string, data interface{}) {
 	ctx.StatusCode(status)
 	ctx.JSON(iris.Map{
-		CODE: status,
-		MSG:  msg,
-		DATA: data,
+		CODE:  status,
+		STATE: false,
+		MSG:   msg,
+		DATA:  data,
 	})
 }

@@ -9,8 +9,7 @@ package main
 
 import (
 	"../framework/bootstrap"
-	//"./middleware/casbin"
-	"./middleware/identity"
+	"../framework/middleware/identity"
 	"./routes"
 )
 
