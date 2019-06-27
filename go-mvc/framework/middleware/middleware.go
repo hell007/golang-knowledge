@@ -5,8 +5,8 @@ import (
 
 	"github.com/kataras/iris/context"
 
-	//"./casbin"
 	"../conf"
+	"./casbin"
 	"./jwt"
 )
 
@@ -24,10 +24,11 @@ func ServeHTTP(ctx context.Context) {
 		return
 	}
 
-	// 系统菜单不进行权限拦截
+	// 系统菜单不进行权限拦截  mvc模式casbin出错了
 	/*if !strings.Contains(path, "/sysMenu") {
 		// casbin权限拦截
-		ok := casbins.CheckPermissions(ctx)
+		ok := casbin.CheckPermissions(ctx)
+
 		if !ok {
 			return
 		}
@@ -43,9 +44,6 @@ return
 	false:需要进一步验证
 */
 func checkURL(reqPath string) bool {
-	// config := iris.YAML("../../framework/conf/app.yml")
-	// ignoreURLs := config.GetOther()["ignoreURLs"].([]interface{})
-
 	for _, v := range conf.AuthIgnores {
 		if reqPath == v {
 			return true

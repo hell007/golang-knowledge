@@ -4,19 +4,17 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 	"sync"
 
 	"github.com/casbin/casbin"
-	//"github.com/go-sql-driver/mysql"
-	//cm "github.com/iris-contrib/middleware/casbin"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/kataras/iris/context"
 
-	"../../bootstrap"
-	//"go-iris/middleware/jwts"
-	//"go-iris/inits/parse"
-	//db "../../../framework/utils/datasource"
+	//"../../bootstrap"
+	db "../../../framework/utils/datasource"
+	"../../conf"
 	"../../utils/response"
+	jwt "../jwt"
 )
 
 var (
@@ -62,8 +60,10 @@ func GetEnforcer() *casbin.Enforcer {
 	}
 
 	m := casbin.NewModel(rbacModel)
+
+	fmt.Println(singleAdapter())
+
 	e = casbin.NewEnforcer(m, singleAdapter())
-	e = casbin.NewEnforcer(m)
 	e.EnableLog(true)
 	return e
 }
@@ -78,21 +78,35 @@ func singleAdapter() *Adapter {
 		return adt
 	}
 
-	master := parse.DBConfig.Master
+	// master := parse.DBConfig.Master
+	// url := db.GetConnURL(&master)
+	// adt = NewAdapter(master.Dialect, url, true)
+
+	master := conf.MasterDbConfig
 	url := db.GetConnURL(&master)
 	adt = NewAdapter(master.Dialect, url, true)
-
 	return adt
 }
 
 func CheckPermissions(ctx context.Context) bool {
-	user, ok := jwts.ParseToken(ctx)
+	user, ok := jwt.ParseToken(ctx)
+
 	if !ok {
 		return false
 	}
 
 	uid := strconv.Itoa(int(user.Id))
+
+	fmt.Println(uid)
+
+	fmt.Println(ctx.Path())
+
+	fmt.Println(ctx.Method())
+
 	yes := GetEnforcer().Enforce(uid, ctx.Path(), ctx.Method(), ".*")
+
+	fmt.Println(yes)
+
 	if !yes {
 		response.Unauthorized(ctx, response.PermissionsLess, nil)
 		ctx.StopExecution()

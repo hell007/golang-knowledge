@@ -35,10 +35,12 @@ func InstanceMaster() *xorm.Engine {
 		return masterEngine
 	}
 
-	c := conf.MasterDbConfig
-	driveSource := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8",
-		c.User, c.Pwd, c.Host, c.Port, c.DbName)
-	engine, err := xorm.NewEngine(conf.DriverName, driveSource)
+	master := conf.MasterDbConfig
+	// driveSource := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8",
+	// 	c.User, c.Pwd, c.Host, c.Port, c.DbName)
+	// engine, err := xorm.NewEngine(c.DriverName, driveSource)
+	engine, err := xorm.NewEngine(master.Dialect, GetConnURL(&master))
+
 	if err != nil {
 		golog.Fatalf("dbhelper.DbInstanceMaster, %s", err)
 		return nil
@@ -59,7 +61,7 @@ func InstanceMaster() *xorm.Engine {
 }
 
 // 从库，单例
-func InstanceSlave() *xorm.Engine {
+/*func InstanceSlave() *xorm.Engine {
 	if slaveEngine != nil {
 		return slaveEngine
 	}
@@ -84,4 +86,17 @@ func InstanceSlave() *xorm.Engine {
 
 	slaveEngine = engine
 	return engine
+}*/
+
+// 获取数据库连接的url
+// true：master主库
+func GetConnURL(c *conf.DbConf) (url string) {
+	url = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s",
+		c.User,
+		c.Pwd,
+		c.Host,
+		c.Port,
+		c.DbName,
+		c.Charset)
+	return
 }

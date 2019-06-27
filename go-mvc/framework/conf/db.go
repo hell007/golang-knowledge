@@ -9,30 +9,35 @@ package conf
 
 // 数据库
 const (
-	DriverName string = "mysql"
-	ShowSQL    bool   = true
+	ShowSQL bool = true
 )
 
 type DbConf struct {
-	Host   string
-	Port   int
-	User   string
-	Pwd    string
-	DbName string
+	Dialect string
+	Host    string
+	Port    int
+	User    string
+	Pwd     string
+	DbName  string
+	Charset string
 }
 
 var MasterDbConfig DbConf = DbConf{
-	Host:   "127.0.0.1",
-	Port:   3306,
-	User:   "root",
-	Pwd:    "admin",
-	DbName: "csms-system",
+	Dialect: "mysql",
+	Host:    "127.0.0.1",
+	Port:    3306,
+	User:    "root",
+	Pwd:     "admin",
+	DbName:  "csms-system",
+	Charset: "utf8",
 }
 
 var SlaveDbConfig DbConf = DbConf{
-	Host:   "127.0.0.1",
-	Port:   3306,
-	User:   "root",
-	Pwd:    "admin",
-	DbName: "csms-system",
+	Dialect: "mysql",
+	Host:    "127.0.0.1",
+	Port:    3306,
+	User:    "root",
+	Pwd:     "admin",
+	DbName:  "csms-system",
+	Charset: "utf8",
 }

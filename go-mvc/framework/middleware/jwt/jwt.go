@@ -210,7 +210,7 @@ func GenerateToken(user *models.User) (string, error) {
 func ParseToken(ctx context.Context) (*models.User, bool) {
 	mapClaims := (jwts.Get(ctx).Claims).(jwt.MapClaims)
 
-	id, ok1 := mapClaims["id"].(int)
+	id, ok1 := mapClaims["id"].(float64)
 	name, ok2 := mapClaims["name"].(string)
 
 	if !ok1 || !ok2 {
