@@ -12,7 +12,7 @@ import (
 	//"github.com/go-xorm/core"
 	"github.com/go-xorm/xorm"
 
-	"../models"
+	models "../models/system"
 	"../utils/page"
 )
 
@@ -46,7 +46,7 @@ func (d *UserDao) List(name string, p *page.Pagination) ([]models.User, int64, e
 
 	list := make([]models.User, 0)
 
-	s := d.engine.Where("name like ?", "%"+name+"%").Limit(p.Limit, p.Start)
+	s := d.engine.Where("username like ?", "%"+name+"%").Limit(p.Limit, p.Start)
 	if p.SortName != "" {
 		switch p.SortOrder {
 		case "asc":

@@ -15,7 +15,7 @@ import (
 	"github.com/kataras/iris"
 
 	"../../framework/middleware/jwt"
-	"../../framework/models"
+	models "../../framework/models/system"
 	"../../framework/services"
 	//"../../framework/utils/encrypt"
 	"../../framework/utils/page"
@@ -28,12 +28,12 @@ type UserController struct {
 }
 
 type UserToken struct {
-	Id     int    `json:"id"`
-	Name   string `json:"name"`
-	Email  string `json:"email"`
-	Mobile string `json:"moblie"`
-	RoleId int    `json:"roleId"`
-	Token  string `json:"token"`
+	Id       int    `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Mobile   string `json:"moblie"`
+	RoleId   int    `json:"roleId"`
+	Token    string `json:"token"`
 }
 
 // user/login
@@ -46,10 +46,10 @@ func (c *UserController) PostLogin() {
 	}
 
 	mUser := new(models.User)
-	mUser.Name = user.Name
+	mUser.Username = user.Username
 	has, err := c.Service.GetUserByName(mUser)
 	if err != nil {
-		c.Ctx.Application().Logger().Errorf("用户[%s]登录失败。%s", user.Name, err.Error())
+		c.Ctx.Application().Logger().Errorf("用户[%s]登录失败。%s", user.Username, err.Error())
 		response.Error(c.Ctx, iris.StatusInternalServerError, response.LoginFailur, nil)
 		return
 	}
@@ -71,14 +71,14 @@ func (c *UserController) PostLogin() {
 
 	// 生成token
 	token, err := jwt.GenerateToken(mUser)
-	golog.Infof("用户[%s], 登录生成token [%s]", mUser.Name, token)
+	golog.Infof("用户[%s], 登录生成token [%s]", mUser.Username, token)
 	if err != nil {
-		c.Ctx.Application().Logger().Errorf("用户[%s]登录，生成token出错。%s", user.Name, err.Error())
+		c.Ctx.Application().Logger().Errorf("用户[%s]登录，生成token出错。%s", user.Username, err.Error())
 		response.Error(c.Ctx, iris.StatusInternalServerError, response.TokenCreateFailur, nil)
 		return
 	}
 
-	ut := UserToken{mUser.Id, mUser.Name, mUser.Email, mUser.Mobile, mUser.RoleId, token}
+	ut := UserToken{mUser.Id, mUser.Username, mUser.Email, mUser.Mobile, mUser.RoleId, token}
 	response.Ok(c.Ctx, response.LoginSuccess, ut)
 }
 

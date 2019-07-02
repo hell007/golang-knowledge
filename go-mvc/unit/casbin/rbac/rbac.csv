@@ -1,0 +1,4 @@
+p, 2, /user/list/*, GET, read
+p, 2, /user/item/*, GET, read
+p, 1, /user/save/, POST, write 
+

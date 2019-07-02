@@ -13,7 +13,7 @@ import (
 	"github.com/kataras/iris/context"
 
 	"../../conf"
-	"../../models"
+	models "../../models/system"
 	"../../utils/response"
 )
 
@@ -179,8 +179,8 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 
 // 断言
 type Claims struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	Id       int    `json:"id"`
+	Username string `json:"username"`
 	//Password string `json:"password"`
 	//User models.User `json:"user"`
 	jwt.StandardClaims
@@ -193,7 +193,7 @@ func GenerateToken(user *models.User) (string, error) {
 
 	claims := Claims{
 		user.Id,
-		user.Name,
+		user.Username,
 		//user.Password,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
@@ -211,7 +211,7 @@ func ParseToken(ctx context.Context) (*models.User, bool) {
 	mapClaims := (jwts.Get(ctx).Claims).(jwt.MapClaims)
 
 	id, ok1 := mapClaims["id"].(float64)
-	name, ok2 := mapClaims["name"].(string)
+	username, ok2 := mapClaims["username"].(string)
 
 	if !ok1 || !ok2 {
 		response.Error(ctx, iris.StatusInternalServerError, response.TokenParseFailur, nil)
@@ -219,8 +219,8 @@ func ParseToken(ctx context.Context) (*models.User, bool) {
 	}
 
 	user := models.User{
-		Id:   int(id),
-		Name: name,
+		Id:       int(id),
+		Username: username,
 	}
 	return &user, true
 }

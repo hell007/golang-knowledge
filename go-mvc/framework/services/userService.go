@@ -9,7 +9,7 @@ package services
 
 import (
 	"../dao"
-	"../models"
+	models "../models/system"
 	"../utils/datasource"
 	"../utils/page"
 )
@@ -30,7 +30,7 @@ type userService struct {
 
 func NewUserService() UserService {
 	return &userService{
-		dao: dao.NewUserDao(datasource.InstanceMaster()),
+		dao: dao.NewUserDao(datasource.MasterEngine()),
 	}
 }
 

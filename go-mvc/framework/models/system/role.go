@@ -1,4 +1,4 @@
-package models
+package system
 
 type CasbinRule struct {
 	Id    int64  `xorm:"pk autoincr INT(10) notnull" json:"id" form:"id"`

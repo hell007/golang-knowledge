@@ -22,7 +22,7 @@
 </br>
 </br>
 <h2>1.登录</h2>
-<input type="text" name="Name" value="刘备"></br>
+<input type="text" name="Name" value="root"></br>
 <input type="text" name="Password" value="123456"></br>
 <button type="button" id="js-submit">登录</button></br></br></br>
 
@@ -44,6 +44,17 @@
 </tr>
 </thead>
 <tbody class="js-list-tbody">
+<tr data-id="2">
+  <th scope="row"></th>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>
+    <button type="button" id="js-edit">查看</button>
+    <button type="button" id="js-delete">删除</button>
+  </td>
+</tr>
 </tbody>
 </table>
 
@@ -84,16 +95,19 @@ $(function(){
     let query = {
       pageNumber: 1,
       pageSize: 5,
-      name: ''
+      username: '张小帅',
     }
 
     const params = Object.keys(query)
       .map(key => query[key] && `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
       .join('&');
 
+    console.log(params)  
+
+
     $.ajax({
       type: "get",
-      url: "http://127.0.0.1:3000/user/list?" + params,
+      url: "http://127.0.0.1:3000/user/list?"+ params,
       async:  true,
       cache: false,
       dataType: "json",
@@ -103,7 +117,7 @@ $(function(){
         for (const item of res.data.rows) {
           tpl +=  `<tr data-id="${item.id}">
             <th scope="row">${item.id}</th>
-            <td>${item.name}</td>
+            <td>${item.username}</td>
             <td>${item.email}</td>
             <td>${item.mobile}</td>
             <td>${item.createTime}</td>
@@ -125,26 +139,26 @@ $(function(){
   });
 
   // 3.添加数据
-	$("#js-add").on("click", function(){
+  $("#js-add").on("click", function(){
 
-		let user = {
-			RoleId: 2,
-			Name: '张小帅555',
-			Password: 'admin333',
-			Email: '33@sohu.com',
-			Mobile: '13888555888',
-			IsSuper: 1,
-			Status: 1,
-		}
+    let user = {
+      RoleId: 2,
+      Name: '张小帅777',
+      Password: 'admin333',
+      Email: '777@sohu.com',
+      Mobile: '13888555777',
+      IsSuper: 1,
+      Status: 1,
+    }
 
-		$.ajax({
+    $.ajax({
       type: "post",
       url: "http://127.0.0.1:3000/user/save",
       async:  true,
       data: JSON.stringify(user),
       cache: false,
       dataType: "json",
-      success: function(res) {   	
+      success: function(res) {    
         console.log(res)
       },
       error: function(e) {
@@ -153,8 +167,8 @@ $(function(){
       beforeSend: function(request) {
         request.setRequestHeader("Authorization", "bearer "+store.get("auth-token"));
       }
-	  });
-	});
+    });
+  });
 
   // 4.查看数据
   $('.js-list-tbody').on('click', '#js-edit', function(){

@@ -1,7 +1,7 @@
 /**
  * name: csms main
  * author: jie
- * date: 2019-6-4
+ * date: 2019-6-04
  * note: csms入口
  */
 
@@ -10,6 +10,7 @@ package main
 import (
 	"../framework/bootstrap"
 	"../framework/middleware/identity"
+	_ "./inits"
 	"./routes"
 )
 

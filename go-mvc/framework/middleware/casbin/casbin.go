@@ -60,9 +60,6 @@ func GetEnforcer() *casbin.Enforcer {
 	}
 
 	m := casbin.NewModel(rbacModel)
-
-	fmt.Println(singleAdapter())
-
 	e = casbin.NewEnforcer(m, singleAdapter())
 	e.EnableLog(true)
 	return e
@@ -98,14 +95,10 @@ func CheckPermissions(ctx context.Context) bool {
 	uid := strconv.Itoa(int(user.Id))
 
 	fmt.Println(uid)
-
 	fmt.Println(ctx.Path())
-
 	fmt.Println(ctx.Method())
 
-	yes := GetEnforcer().Enforce(uid, ctx.Path(), ctx.Method(), ".*")
-
-	fmt.Println(yes)
+	yes := GetEnforcer().Enforce("user", ctx.Path(), ctx.Method(), ".*")
 
 	if !yes {
 		response.Unauthorized(ctx, response.PermissionsLess, nil)
