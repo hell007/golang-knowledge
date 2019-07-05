@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"../conf"
+	"../utils/response"
 )
 
 const (
@@ -104,7 +105,7 @@ func (b *Bootstrapper) SetupWebsockets(endpoint string, onConnection websocket.C
 
 // SetupErrorHandlers: prepares the http error handlers
 //`(context.StatusCodeNotSuccessful`,  which defaults to < 200 || >= 400 but you can change it).
-func (b *Bootstrapper) SetupErrorHandlers() {
+func (b *Bootstrapper) SetupErrorHandlers222() {
 	b.OnAnyErrorCode(func(ctx iris.Context) {
 		err := iris.Map{
 			"app":     b.AppName,
@@ -120,6 +121,39 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 		ctx.ViewData("Err", err)
 		ctx.ViewData("Title", "Error")
 		ctx.View("error.html")
+	})
+}
+
+// SetupErrorHandlers: prepares the http error handlers
+func (b *Bootstrapper) SetupErrorHandlers() {
+	b.Logger().SetLevel(conf.LogLevel)
+
+	customLogger := logger.New(logger.Config{
+		//状态显示状态代码
+		Status: true,
+		// IP显示请求的远程地址
+		IP: true,
+		//方法显示http方法
+		Method: true,
+		// Path显示请求路径
+		Path: true,
+		// Query将url查询附加到Path。
+		Query: true,
+		//Columns：true，
+		// 如果不为空然后它的内容来自`ctx.Values(),Get("logger_message")
+		//将添加到日志中。
+		MessageContextKeys: []string{"logger_message"},
+		//如果不为空然后它的内容来自`ctx.GetHeader（“User-Agent”）
+		MessageHeaderKeys: []string{"User-Agent"},
+	})
+	b.Use(
+		recover.New(),
+		customLogger,
+	)
+
+	// ---------------------- 定义错误处理 ------------------------
+	b.OnErrorCode(iris.StatusNotFound, customLogger, func(ctx iris.Context) {
+		response.Error(ctx, iris.StatusNotFound, response.NotFound, nil)
 	})
 }
 
@@ -140,8 +174,8 @@ func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 	b.StaticWeb(StaticAssets[1:len(StaticAssets)-1], StaticAssets)
 
 	// middleware, after static files
-	b.Use(recover.New())
-	b.Use(logger.New())
+	// b.Use(recover.New())
+	// b.Use(logger.New())
 
 	return b
 }

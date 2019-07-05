@@ -15,11 +15,12 @@ import (
 )
 
 type UserService interface {
-	GetAll() []models.User
+	//GetAll() []models.User
 	List(name string, p *page.Pagination) ([]models.User, int64, error)
 	Get(id int) *models.User
-	GetUserByName(user *models.User) (bool, error)
-	Delete(id int) (int64, error)
+	GetUserByName(name string, user *models.User) (bool, error)
+	GetRoleNameByRId(rid int) (string, error)
+	Delete(ids []int) (int64, error)
 	Update(user *models.User, columns []string) (int64, error)
 	Create(user *models.User) (int64, error)
 }
@@ -34,9 +35,9 @@ func NewUserService() UserService {
 	}
 }
 
-func (s *userService) GetAll() []models.User {
-	return s.dao.GetAll()
-}
+// func (s *userService) GetAll() []models.User {
+// 	return s.dao.GetAll()
+// }
 
 func (s *userService) List(name string, p *page.Pagination) ([]models.User, int64, error) {
 	return s.dao.List(name, p)
@@ -46,8 +47,12 @@ func (s *userService) Get(id int) *models.User {
 	return s.dao.Get(id)
 }
 
-func (s *userService) GetUserByName(user *models.User) (bool, error) {
-	return s.dao.GetUserByName(user)
+func (s *userService) GetUserByName(name string, user *models.User) (bool, error) {
+	return s.dao.GetUserByName(name, user)
+}
+
+func (s *userService) GetRoleNameByRId(rid int) (string, error) {
+	return s.dao.GetRoleNameByRId(rid)
 }
 
 func (s *userService) Update(user *models.User, columns []string) (int64, error) {
@@ -58,6 +63,6 @@ func (s *userService) Create(user *models.User) (int64, error) {
 	return s.dao.Create(user)
 }
 
-func (s *userService) Delete(id int) (int64, error) {
-	return s.dao.Delete(id)
+func (s *userService) Delete(ids []int) (int64, error) {
+	return s.dao.Delete(ids)
 }

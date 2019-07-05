@@ -24,7 +24,7 @@ func ServeHTTP(ctx context.Context) {
 		return
 	}
 
-	// 系统菜单不进行权限拦截  mvc模式casbin出错了
+	// 系统菜单不进行权限拦截
 	if !strings.Contains(path, "/sysMenu") {
 		// casbin权限拦截
 		ok := casbin.CheckPermissions(ctx)

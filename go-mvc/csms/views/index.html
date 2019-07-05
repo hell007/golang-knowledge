@@ -21,16 +21,27 @@
 <body>
 </br>
 </br>
-<h2>1.登录</h2>
-<input type="text" name="Name" value="root"></br>
-<input type="text" name="Password" value="123456"></br>
+<h2>1.注册</h2>
+<input type="text" class="js-username" value="曹操"></br>
+<input type="text" class="js-pwd" value="123456"></br>
+<input type="text" class="js-role" value="2"></br>
+<input type="text" class="js-email" value="cc@sina.com"></br>
+<input type="text" class="js-mobile" value="13888888888"></br>
+<button id="js-add">注册</button>
+
+
+
+</br>
+</br>
+<h2>2.登录</h2>
+<input type="text" class="js-login-username" value="曹操"></br>
+<input type="text" class="js-login-pwd" value="123456"></br>
 <button type="button" id="js-submit">登录</button></br></br></br>
 
 </br>
 </br>
-<h2>2.获取数据</h2>
+<h2>3.获取数据</h2>
 <button id="js-list">获取</button>
-<button id="js-add">添加</button>
 
 <table class="table">
 <thead>
@@ -44,19 +55,13 @@
 </tr>
 </thead>
 <tbody class="js-list-tbody">
-<tr data-id="2">
-  <th scope="row"></th>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td>
-    <button type="button" id="js-edit">查看</button>
-    <button type="button" id="js-delete">删除</button>
-  </td>
-</tr>
 </tbody>
 </table>
+
+</br>
+</br>
+<h2>4.退出登录</h2>
+<button type="button" id="js-loginout">退出</button></br></br></br>
 
 <script src="assets/vendors/jquery/3.3.1/dist/jquery.min.js"></script>
 <script src="assets/vendors/bootstrap/bootstrap.min.js"></script>
@@ -64,13 +69,17 @@
 <script>
 $(function(){
 
+  var token ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzgsInVzZXJuYW1lIjoi5pu55pONIiwicm9sZW5hbWUiOiJhZG1pbiIsImV4cCI6MTU2MjMxMzU0MCwiaWF0IjoxNTYyMzA5OTQwLCJpc3MiOiJpcmlzLWNhc2JpbnMtand0In0.GRK3tzaRU2UayGW3VcGjdvCqocnDTGjCWu_mql3n8BI'
+
   // 1.登录
   $("#js-submit").on("click", function(){
 
     let user = {
-      Name: '刘备',
-      Password: '123456'
+      Username: $('.js-login-username').val(),
+      Password: $('.js-login-pwd').val()
     }
+
+    console.log('登录用户==',user)
 
     $.ajax({
       type: "post",
@@ -94,8 +103,8 @@ $(function(){
 
     let query = {
       pageNumber: 1,
-      pageSize: 5,
-      username: '张小帅',
+      pageSize: 10,
+      name: '',
     }
 
     const params = Object.keys(query)
@@ -133,7 +142,8 @@ $(function(){
         console.log(e)
       },
       beforeSend: function(request) {
-        request.setRequestHeader("Authorization", "bearer "+store.get("auth-token"));
+        request.setRequestHeader("Authorization", "bearer "+token);
+        //request.setRequestHeader("Authorization", "bearer "+store.get("auth-token"));
       }
     });
   });
@@ -142,18 +152,18 @@ $(function(){
   $("#js-add").on("click", function(){
 
     let user = {
-      RoleId: 2,
-      Name: '张小帅777',
-      Password: 'admin333',
-      Email: '777@sohu.com',
-      Mobile: '13888555777',
+      RoleId: parseInt($('.js-role').val()),
+      Username: $('.js-username').val(),
+      Password: $('.js-pwd').val(),
+      Email: $('.js-email').val(),
+      Mobile: $('.js-mobile').val(),
       IsSuper: 1,
       Status: 1,
     }
 
     $.ajax({
       type: "post",
-      url: "http://127.0.0.1:3000/user/save",
+      url: "http://127.0.0.1:3000/user/registe",
       async:  true,
       data: JSON.stringify(user),
       cache: false,
@@ -194,15 +204,12 @@ $(function(){
   // 5.删除数据
   $('.js-list-tbody').on('click', '#js-delete', function(){
     const id = $(this).parents('tr').attr('data-id')
-    let user = {
-      Id: parseInt(id)
-    }
-    console.log(user)
+    const ids = [69,73]
     $.ajax({
-      type: "post",
-      url: "http://127.0.0.1:3000/user/delete",
+      type: "get",
+      //url: "http://127.0.0.1:3000/user/delete?id=" +ids.join(","),
+      url: "http://127.0.0.1:3000/user/delete?id=" +id,
       async:  true,
-      data: JSON.stringify(user),
       cache: false,
       dataType: "json",
       success: function(data) {     
@@ -216,6 +223,31 @@ $(function(){
       }
     });
   });
+
+  // 6.退出
+  $('#js-loginout').on('click', function(){
+    $.ajax({
+      type: "get",
+      url: "http://127.0.0.1:3000/user/loginout",
+      async:  true,
+      cache: false,
+      dataType: "json",
+      success: function(data) {     
+        console.log(data)
+        //store.set("auth-token", "")
+      },
+      error: function(e) {
+        console.log(e)
+      },
+      beforeSend: function(request) {
+        request.setRequestHeader("Authorization", "bearer "+store.get("auth-token"));
+      }
+    });
+  });
+
+
+
+  
 })
 </script>
 </body>

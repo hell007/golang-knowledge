@@ -77,7 +77,7 @@ func ConfigJWT() {
 		//这个方法将验证jwt的token
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 			//自己加密的秘钥或者说盐值
-			return []byte(conf.SysSecret), nil
+			return []byte(conf.JWTSecret), nil
 		},
 		//设置后，中间件会验证令牌是否使用特定的签名算法进行签名
 		//如果签名方法不是常量，则可以使用ValidationKeyGetter回调来实现其他检查
@@ -178,51 +178,87 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 }
 
 // 断言
-type Claims struct {
+type JWTClaims struct {
 	Id       int    `json:"id"`
 	Username string `json:"username"`
-	//Password string `json:"password"`
-	//User models.User `json:"user"`
+	Rolename string `json:"rolename"`
 	jwt.StandardClaims
 }
 
-// 在登录成功的时候生成token
-func GenerateToken(user *models.User) (string, error) {
-	//expireTime := time.Now().Add(time.Duration(parse.O.JWTTimeout) * time.Second)
-	expireTime := time.Now().Add(time.Duration(600) * time.Second)
+func (c *JWTClaims) SetExpiredAt(expiredAt int64) {
+	c.ExpiresAt = expiredAt
+}
 
-	claims := Claims{
-		user.Id,
-		user.Username,
-		//user.Password,
+// 在登录成功的时候生成token
+func GenerateToken(ut *models.UserToken) (string, error) {
+
+	claims := JWTClaims{
+		ut.Id,
+		ut.Username,
+		ut.Rolename,
 		jwt.StandardClaims{
-			ExpiresAt: expireTime.Unix(),
-			Issuer:    "iris-casbins-jwt",
+			Issuer: "iris-casbins-jwt",
 		},
 	}
 
+	claims.IssuedAt = time.Now().Unix()
+	claims.SetExpiredAt(time.Now().Add(time.Second * time.Duration(conf.JWTTimeout)).Unix())
+
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token, err := tokenClaims.SignedString([]byte(conf.SysSecret))
+	token, err := tokenClaims.SignedString([]byte(conf.JWTSecret))
+
 	return token, err
 }
 
+// 根据原先的token刷新token的过期时间
+func RefreshToken(signedToken string) (string, error) {
+
+	token, err := jwt.ParseWithClaims(signedToken, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(conf.JWTSecret), nil
+	})
+
+	if err != nil {
+		golog.Errorf("RefreshToken解析token出错, %s", err)
+		return signedToken, err
+	}
+
+	claims, ok := token.Claims.(*JWTClaims)
+	if !ok {
+		golog.Errorf("RefreshToken解析claims出错, %s", err)
+		return signedToken, err
+	}
+
+	if err := token.Claims.Valid(); err != nil {
+		golog.Errorf("RefreshToken验证token出错, %s", err)
+		return signedToken, err
+	}
+
+	claims.ExpiresAt = time.Now().Unix() + (claims.ExpiresAt - claims.IssuedAt)
+
+	newToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	refreshToken, err := newToken.SignedString([]byte(conf.JWTSecret))
+
+	return refreshToken, err
+}
+
 // 解析token的信息为当前用户
-func ParseToken(ctx context.Context) (*models.User, bool) {
+func ParseToken(ctx context.Context) (*models.UserToken, bool) {
 	mapClaims := (jwts.Get(ctx).Claims).(jwt.MapClaims)
 
 	id, ok1 := mapClaims["id"].(float64)
-	username, ok2 := mapClaims["username"].(string)
+	rolename, ok2 := mapClaims["rolename"].(string)
 
 	if !ok1 || !ok2 {
 		response.Error(ctx, iris.StatusInternalServerError, response.TokenParseFailur, nil)
 		return nil, false
 	}
 
-	user := models.User{
+	ut := models.UserToken{
 		Id:       int(id),
-		Username: username,
+		Rolename: rolename,
 	}
-	return &user, true
+
+	return &ut, true
 }
 
 // 以下的方法都是从url获取token

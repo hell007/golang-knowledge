@@ -73,25 +73,43 @@ func (d *UserDao) Get(id int) *models.User {
 }
 
 // GetUserByName
-func (d *UserDao) GetUserByName(user *models.User) (bool, error) {
-	return d.engine.Get(user)
+func (d *UserDao) GetUserByName(name string, user *models.User) (bool, error) {
+	//return d.engine.Get(user) name 错误仍然能查出
+	return d.engine.Where("username = ?", name).Get(user)
+}
+
+// GetRoleNameById
+func (d *UserDao) GetRoleNameByRId(rid int) (string, error) {
+	var rolename string
+	_, err := d.engine.Table("jie_role").Where("role_id = ?", rid).Cols("role_name").Get(&rolename)
+	return rolename, err
 }
 
 // update
 func (d *UserDao) Update(data *models.User, columns []string) (int64, error) {
-	rows, err := d.engine.Id(data.Id).MustCols(columns...).Update(data)
-	return rows, err
+	effect, err := d.engine.Id(data.Id).MustCols(columns...).Update(data)
+	return effect, err
 }
 
 // insert
 func (d *UserDao) Create(data *models.User) (int64, error) {
-	rows, err := d.engine.Insert(data)
-	return rows, err
+	effect, err := d.engine.Insert(data)
+	return effect, err
 }
 
 // delete
-func (d *UserDao) Delete(id int) (int64, error) {
-	data := &models.User{Id: id}
-	rows, err := d.engine.Id(data.Id).Delete(data)
-	return rows, err
+func (d *UserDao) Delete(ids []int) (int64, error) {
+	var (
+		effect int64
+		err    error
+	)
+
+	u := new(models.User)
+
+	for _, v := range ids {
+		i, err1 := d.engine.Id(v).Delete(u)
+		effect += i
+		err = err1
+	}
+	return effect, err
 }

@@ -3,7 +3,7 @@ package casbin
 import (
 	"fmt"
 	"net/http"
-	"strconv"
+	//"strconv"
 	"sync"
 
 	"github.com/casbin/casbin"
@@ -60,6 +60,7 @@ func GetEnforcer() *casbin.Enforcer {
 	}
 
 	m := casbin.NewModel(rbacModel)
+	//e = casbin.NewEnforcer("./rbac.fong", "./rbac.csv")
 	e = casbin.NewEnforcer(m, singleAdapter())
 	e.EnableLog(true)
 	return e
@@ -86,19 +87,16 @@ func singleAdapter() *Adapter {
 }
 
 func CheckPermissions(ctx context.Context) bool {
-	user, ok := jwt.ParseToken(ctx)
+	ut, ok := jwt.ParseToken(ctx)
 
 	if !ok {
 		return false
 	}
 
-	uid := strconv.Itoa(int(user.Id))
+	//uid := strconv.Itoa(int(user.Id))
+	rolename := ut.Rolename
 
-	fmt.Println(uid)
-	fmt.Println(ctx.Path())
-	fmt.Println(ctx.Method())
-
-	yes := GetEnforcer().Enforce("user", ctx.Path(), ctx.Method(), ".*")
+	yes := GetEnforcer().Enforce(rolename, ctx.Path(), ctx.Method(), ".*")
 
 	if !yes {
 		response.Unauthorized(ctx, response.PermissionsLess, nil)

@@ -30,13 +30,8 @@ const (
 	SysTimeformShort string = "2019-06-04"
 )
 
-// 系统设置
-const (
-	SysSecret string = "jie-Secret"
-)
-
 // auth
-var AuthIgnores = []string{"/", "/user/login"}
+var AuthIgnores = []string{"/", "/user/login", "/user/loginout"}
 
 // log
 const (
@@ -45,7 +40,8 @@ const (
 
 // jwt
 const (
-	JWTTimeout int = 900 //second
+	JWTSecret  string = "jie-Secret" //加盐
+	JWTTimeout int    = 3600         //second
 )
 
 // 中国时区

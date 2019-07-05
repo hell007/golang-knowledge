@@ -9,8 +9,9 @@ import (
 var (
 	// 定义系统初始的角色
 	Components = [][]string{
-		{"admin", "/admin*", "GET|POST|DELETE|PUT", ".*"},
-		{"user", "/user*", "GET|POST|DELETE|PUT", ".*"},
+		{"superadmin", "/*", "GET|POST|DELETE|PUT", ".*"},
+		{"admin", "/user*", "GET|POST|DELETE|PUT", ".*"},
+		{"goods", "/goods*", "GET|POST|DELETE|PUT", ".*"},
 	}
 )
 
