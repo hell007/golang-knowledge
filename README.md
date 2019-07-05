@@ -107,6 +107,12 @@ config
 
 [Iris + Casbin 权限控制实战](http://zxc0328.github.io/2018/05/14/casbin-iris/?utm_source=tuicool&utm_medium=referral)
 
+### 3、jwt-go
+
+[jwt-go](https://github.com/dgrijalva/jwt-go)
+
+[token失效解决](https://segmentfault.com/q/1010000010043871)
+
 
 ## rpc
 
