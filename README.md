@@ -93,13 +93,6 @@ config
         github.com/kataras/iris
         github.com/kataras/golog
         github.com/kataras/pio   
-        
-
-案列：
-
-        demo: https://github.com/yz124/superstar
-
-[从 PHP Laravel 到 Go Iris--路由篇](https://learnku.com/articles/6020/from-php-laravel-to-go-iris-routing)
 
 ### 2、Casbin
 
