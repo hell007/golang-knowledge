@@ -63,6 +63,12 @@
 <h2>4.退出登录</h2>
 <button type="button" id="js-loginout">退出</button></br></br></br>
 
+</br>
+</br>
+<h2>5.刷新</h2>
+<button type="button" id="js-refresh">刷新</button></br></br></br>
+
+
 <script src="assets/vendors/jquery/3.3.1/dist/jquery.min.js"></script>
 <script src="assets/vendors/bootstrap/bootstrap.min.js"></script>
 <script src="assets/vendors/storejs/dist/store.min.js"></script>
@@ -142,8 +148,8 @@ $(function(){
         console.log(e)
       },
       beforeSend: function(request) {
-        request.setRequestHeader("Authorization", "bearer "+token);
-        //request.setRequestHeader("Authorization", "bearer "+store.get("auth-token"));
+        //request.setRequestHeader("Authorization", "bearer "+token);
+        request.setRequestHeader("Authorization", "bearer "+store.get("auth-token"));
       }
     });
   });
@@ -234,7 +240,29 @@ $(function(){
       dataType: "json",
       success: function(data) {     
         console.log(data)
-        //store.set("auth-token", "")
+        store.remove("auth-token")
+      },
+      error: function(e) {
+        console.log(e)
+      },
+      beforeSend: function(request) {
+        request.setRequestHeader("Authorization", "bearer "+store.get("auth-token"));
+      }
+    });
+  });
+
+  // 6.刷新token
+  $("#js-refresh").on("click", function(){
+
+    $.ajax({
+      type: "get",
+      url: "http://127.0.0.1:3000/user/test",
+      async:  true,
+      cache: false,
+      dataType: "json",
+      success: function(res) {    
+        console.log(res)
+        store.set("auth-token", res.data)
       },
       error: function(e) {
         console.log(e)
