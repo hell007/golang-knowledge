@@ -16,7 +16,7 @@ import (
 
 func ReadWrite() {
 
-	filePath := "./city.txt"
+	filePath := "D:/Dev/cygwin/work/golang-knowledge/code/city.txt"
 	//1、打开文件
 	//file, err := os.Open(filePath) // For read access.
 
@@ -25,9 +25,21 @@ func ReadWrite() {
 	//2、关闭文件
 	defer file.Close()
 
-	if err == nil {
+	if err != nil {
 		fmt.Println("打开失败！")
 	}
+
+	//3、读取文件
+	var b []byte = make([]byte, 4096)
+
+	n, err := file.Read(b)
+
+	if err != nil {
+		fmt.Println("Open file Failed", err)
+	}
+
+	data := string(b[:n])
+	fmt.Println(data)
 
 }
 
