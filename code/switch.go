@@ -26,7 +26,8 @@ import (
 
 func main() {
 
-	// Go里面switch默认相当于每个case最后带有break，匹配成功后不会自动向下执行其他case，而是跳出整个switch, 但是可以使用fallthrough强制执行后面的case代码
+	// Go里面switch默认相当于每个case最后带有break，匹配成功后不会自动向下执行其他case，而是跳出整个switch,
+	// 但是可以使用fallthrough强制执行后面的case代码
 
 	a := 8
 

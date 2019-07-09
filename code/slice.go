@@ -72,4 +72,16 @@ func main() {
 	fmt.Println(dist)
 	fmt.Println(src)
 
+	// 创建slice
+
+	sliceA := make(map[int]string)
+	sliceA[0] = "曹操"
+	sliceA[1] = "刘备"
+	sliceA[2] = "孙权"
+	fmt.Println(sliceA)
+
+	for _,val := range sliceA {
+		fmt.Println(val)
+	}
+
 }

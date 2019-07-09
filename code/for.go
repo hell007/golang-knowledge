@@ -38,7 +38,8 @@ func main() {
 
 	fmt.Println("b=", b)
 
-	// 3、在循环里面有两个关键操作break和continue	,break操作是跳出当前循环，continue是跳过本次循环。当嵌套过深的时候，break可以配合标签使用，即跳转至标签所指定的位置;
+	// 3、在循环里面有两个关键操作break和continue	,break操作是跳出当前循环，continue是跳过本次循环。
+	// 当嵌套过深的时候，break可以配合标签使用，即跳转至标签所指定的位置;
 
 	// break和continue还可以跟着标号，用来跳到多重循环中的外层循环
 
@@ -65,7 +66,8 @@ func main() {
 		fmt.Println("fslice's val:", v)
 	}
 
-	// 由于 Go 支持 “多值返回”, 而对于“声明而未被调用”的变量, 编译器会报错, 在这种情况下, 可以使用_来丢弃不需要的返回值 例如
+	// 由于 Go 支持 “多值返回”, 而对于“声明而未被调用”的变量, 编译器会报错,
+	// 在这种情况下, 可以使用_来丢弃不需要的返回值 例如
 
 	for _, v := range fslice {
 		fmt.Println("fslice's val:", v)

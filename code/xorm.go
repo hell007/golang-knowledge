@@ -32,7 +32,9 @@ var x *xorm.Engine
 //创建orm引擎
 func init() {
 	var err error
-	x, err = xorm.NewEngine("mysql", "root:admin@tcp(127.0.0.1:3306)/jie?charset=utf8")
+	//x, err = xorm.NewEngine("mysql", "root:admin@tcp(127.0.0.1:3306)/jie?charset=utf8")
+
+	x, err = xorm.NewEngine("mysql", "root:admin@tcp(127.0.0.1:3306)/csms-system?charset=utf8")
 
 	if err != nil {
 		log.Fatal("数据库连接失败:", err)
@@ -94,34 +96,34 @@ func main() {
 	// QueryString 返回 []map[string]string
 	// QueryInterface 返回 []map[string]interface{}
 
-	q1, _ := x.Query("select * from userinfo")
-	fmt.Println("Query q1= ", q1, "\n")
+	//q1, _ := x.Query("select * from userinfo")
+	//fmt.Println("Query q1= ", q1, "\n")
 
-	q2, _ := x.QueryString("select username from userinfo where uid=8")
-	fmt.Println("Query q2= ", q2, "\n")
+	//q2, _ := x.QueryString("select username from userinfo where uid=8")
+	//fmt.Println("Query q2= ", q2, "\n")
 
-	q3, _ := x.QueryInterface("select * from userinfo")
-	fmt.Println("Query q3= ", q3, "\n")
+	//q3, _ := x.QueryInterface("select * from userinfo")
+	//.Println("Query q3= ", q3, "\n")
 
 	// 单条记录
-	uinfo := new(Userinfo)
+	//uinfo := new(Userinfo)
 
 	// q4, _ := x.Get(uinfo)
 	// fmt.Println("Get q4= ", q4, "\n")
 
-	q5, _ := x.Where("username = ?", "曹操").Desc("uid").Get(uinfo)
-	fmt.Println("Get q5= ", q5, "\n")
+	//q5, _ := x.Where("username = ?", "曹操").Desc("uid").Get(uinfo)
+	//fmt.Println("Get q5= ", q5, "\n")
 
-	var username string
-	q6, _ := x.Table("userinfo").Where("uid = ?", 8).Cols("username").Get(&username)
-	fmt.Println("Get q6= ", q6, "\n")
+	//var username string
+	//q6, _ := x.Table("userinfo").Where("uid = ?", 8).Cols("username").Get(&username)
+	//fmt.Println("Get q6= ", q6, "\n")
 
-	q7, _ := x.SQL("select username from userinfo").Get(&username)
-	fmt.Println("Get q7= ", q7, "\n")
+	//q7, _ := x.SQL("select username from userinfo").Get(&username)
+	//fmt.Println("Get q7= ", q7, "\n")
 
-	var valuesMap = make(map[string]string)
-	q8, _ := x.Table("userinfo").Where("uid = ?", 8).Get(&valuesMap)
-	fmt.Println("Get q8= ", q8, "\n")
+	//var valuesMap = make(map[string]string)
+	//q8, _ := x.Table("userinfo").Where("uid = ?", 8).Get(&valuesMap)
+	//fmt.Println("Get q8= ", q8, "\n")
 
 	// cols := {}
 	// var valuesSlice = make([]interface{}, len(cols))
@@ -175,5 +177,14 @@ func main() {
 	fmt.Println("\n删除")
 
 	// Del(10)
+
+	// 5.多表查询
+
+	var rolename string
+	has, err := x.Table("jie_role").Where("role_id = ?", 2).Cols("role_name").Get(&rolename)
+
+	fmt.Println(has)
+	fmt.Println(err)
+	fmt.Println(rolename)
 
 }
