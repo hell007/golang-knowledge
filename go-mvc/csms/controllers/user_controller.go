@@ -50,7 +50,8 @@ func (c *UserController) PostRegiste() {
 	effect, err = c.Service.Create(user)
 	if effect <= 0 || err != nil {
 		c.Ctx.Application().Logger().Errorf("用户[%s]注册失败。%s", user.Username, err.Error())
-		goto FAIL
+		response.Error(c.Ctx, iris.StatusInternalServerError, response.RegisteFailur, nil)
+		return
 	}
 
 	response.Ok_(c.Ctx, response.RegisteSuccess)
@@ -58,7 +59,7 @@ func (c *UserController) PostRegiste() {
 
 	// 失败处理
 FAIL:
-	response.Error(c.Ctx, iris.StatusInternalServerError, response.RegisteFailur, nil)
+	response.Error(c.Ctx, iris.StatusBadRequest, response.RegisteFailur, nil)
 	return
 }
 
