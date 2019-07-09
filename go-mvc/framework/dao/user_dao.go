@@ -86,14 +86,14 @@ func (d *UserDao) GetRoleNameByRId(rid int) (string, error) {
 }
 
 // update
-func (d *UserDao) Update(data *models.User, columns []string) (int64, error) {
-	effect, err := d.engine.Id(data.Id).MustCols(columns...).Update(data)
+func (d *UserDao) Update(user *models.User, columns []string) (int64, error) {
+	effect, err := d.engine.Id(user.Id).MustCols(columns...).Update(user)
 	return effect, err
 }
 
 // insert
-func (d *UserDao) Create(data *models.User) (int64, error) {
-	effect, err := d.engine.Insert(data)
+func (d *UserDao) Create(user *models.User) (int64, error) {
+	effect, err := d.engine.Insert(user)
 	return effect, err
 }
 
