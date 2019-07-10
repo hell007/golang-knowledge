@@ -6,9 +6,11 @@ import (
 
 	"github.com/casbin/casbin/model"
 	"github.com/casbin/casbin/persist"
+	"github.com/go-xorm/core"
 	"github.com/go-xorm/xorm"
 	"github.com/lib/pq"
 
+	"../../conf"
 	models "../../models/system"
 )
 
@@ -113,6 +115,8 @@ func (a *Adapter) close() {
 }
 
 func (a *Adapter) createTable() {
+	tbMapper := core.NewPrefixMapper(core.SnakeMapper{}, conf.TablePrefix)
+	a.engine.SetTableMapper(tbMapper)
 	err := a.engine.Sync2(new(models.CasbinRule))
 	if err != nil {
 		panic(err)
