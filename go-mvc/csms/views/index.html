@@ -68,6 +68,11 @@
 <h2>5.刷新</h2>
 <button type="button" id="js-refresh">刷新</button></br></br></br>
 
+</br>
+</br>
+<h2>6.role</h2>
+<button type="button" id="js-role">role测试</button></br></br></br>
+
 
 <script src="assets/vendors/jquery/3.3.1/dist/jquery.min.js"></script>
 <script src="assets/vendors/bootstrap/bootstrap.min.js"></script>
@@ -89,7 +94,7 @@ $(function(){
 
     $.ajax({
       type: "post",
-      url: "http://127.0.0.1:3000/user/login",
+      url: "http://127.0.0.1:3000/sys/user/login",
       async:  true,
       data: JSON.stringify(user),
       cache: false,
@@ -122,7 +127,7 @@ $(function(){
 
     $.ajax({
       type: "get",
-      url: "http://127.0.0.1:3000/user/list?"+ params,
+      url: "http://127.0.0.1:3000/sys/user/list?"+ params,
       async:  true,
       cache: false,
       dataType: "json",
@@ -169,7 +174,7 @@ $(function(){
 
     $.ajax({
       type: "post",
-      url: "http://127.0.0.1:3000/user/registe",
+      url: "http://127.0.0.1:3000/sys/user/registe",
       async:  true,
       data: JSON.stringify(user),
       cache: false,
@@ -191,7 +196,7 @@ $(function(){
     const id = $(this).parents('tr').attr('data-id')
     $.ajax({
       type: "get",
-      url: "http://127.0.0.1:3000/user/item?id=" + id,
+      url: "http://127.0.0.1:3000/sys/user/item?id=" + id,
       async:  true,
       cache: false,
       dataType: "json",
@@ -214,7 +219,7 @@ $(function(){
     $.ajax({
       type: "get",
       //url: "http://127.0.0.1:3000/user/delete?id=" +ids.join(","),
-      url: "http://127.0.0.1:3000/user/delete?id=" +id,
+      url: "http://127.0.0.1:3000/sys/user/delete?id=" +id,
       async:  true,
       cache: false,
       dataType: "json",
@@ -234,7 +239,7 @@ $(function(){
   $('#js-loginout').on('click', function(){
     $.ajax({
       type: "get",
-      url: "http://127.0.0.1:3000/user/loginout",
+      url: "http://127.0.0.1:3000/sys/user/loginout",
       async:  true,
       cache: false,
       dataType: "json",
@@ -256,7 +261,7 @@ $(function(){
 
     $.ajax({
       type: "get",
-      url: "http://127.0.0.1:3000/user/test",
+      url: "http://127.0.0.1:3000/sys/user/test",
       async:  true,
       cache: false,
       dataType: "json",
@@ -273,6 +278,35 @@ $(function(){
     });
   });
 
+  // 7.role
+  $("#js-role").on("click", function(){
+    let query = {
+      pageNumber: 1,
+      pageSize: 10,
+    }
+
+    const params = Object.keys(query)
+            .map(key => query[key] && `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
+            .join('&');
+
+    $.ajax({
+      type: "get",
+      //url: "http://127.0.0.1:3000/sys/role/list?" + params,
+      url: "http://127.0.0.1:3000/sys/role/roleuserlist?rKey=/sys/*",
+      async:  true,
+      cache: false,
+      dataType: "json",
+      success: function(res) {
+        console.log(res)
+      },
+      error: function(e) {
+        console.log(e)
+      },
+      beforeSend: function(request) {
+        request.setRequestHeader("Authorization", "bearer "+store.get("auth-token"));
+      }
+    });
+  });
 
 
   

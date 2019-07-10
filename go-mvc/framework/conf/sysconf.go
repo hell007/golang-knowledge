@@ -31,7 +31,7 @@ const (
 )
 
 // auth
-var AuthIgnores = []string{"/", "/user/login", "/user/loginout"}
+var AuthIgnores = []string{"/", "/sys/user/login", "/sys/user/loginout"}
 
 // log
 const (

@@ -36,9 +36,24 @@ func Configure(b *bootstrap.Bootstrapper) {
 		ctx.View("index.html")
 	})
 
-	// 用户
-	user := mvc.New(main.Party("/user"))
-	userService := services.NewUserService()
-	user.Register(userService)
-	user.Handle(new(controllers.UserController))
+	// 系统模块
+	sys := main.Party("/sys")
+	{
+		//系统用户子模块
+		user := mvc.New(sys.Party("/user"))
+		userService := services.NewUserService()
+		user.Register(userService)
+		user.Handle(new(controllers.UserController))
+
+		//系统角色子模块
+		role := mvc.New(sys.Party("/role"))
+		roleService := services.NewRoleService()
+		role.Register(roleService)
+		role.Handle(new(controllers.RoleController))
+	}
+
+	//user := mvc.New(main.Party("/user"))
+	//userService := services.NewUserService()
+	//user.Register(userService)
+	//user.Handle(new(controllers.UserController))
 }

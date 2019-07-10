@@ -9,7 +9,8 @@ package conf
 
 // 数据库
 const (
-	ShowSQL bool = true
+	ShowSQL     bool   = true
+	TablePrefix string = "jie_"
 )
 
 type DbConf struct {

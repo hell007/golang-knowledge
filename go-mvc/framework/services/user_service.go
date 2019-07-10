@@ -17,6 +17,7 @@ import (
 type UserService interface {
 	//GetAll() []models.User
 	List(name string, p *page.Pagination) ([]models.User, int64, error)
+	GetUsersByIds(ids []int, page *page.Pagination) ([]models.User, int64, error)
 	Get(id int) *models.User
 	GetUserByName(name string, user *models.User) (bool, error)
 	GetRoleNameByRId(rid int) (string, error)
@@ -35,12 +36,16 @@ func NewUserService() UserService {
 	}
 }
 
-// func (s *userService) GetAll() []models.User {
-// 	return s.dao.GetAll()
-// }
+//func (s *userService) GetAll() []models.User {
+//	return s.dao.GetAll()
+//}
 
 func (s *userService) List(name string, p *page.Pagination) ([]models.User, int64, error) {
 	return s.dao.List(name, p)
+}
+
+func (s *userService) GetUsersByIds(ids []int, p *page.Pagination) ([]models.User, int64, error) {
+	return s.dao.GetUsersByIds(ids, p)
 }
 
 func (s *userService) Get(id int) *models.User {

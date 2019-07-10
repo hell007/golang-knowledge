@@ -183,7 +183,7 @@ func (c *UserController) GetList() {
 	username = c.Ctx.URLParam("name")
 	list, total, err = c.Service.List(username, p)
 	if err != nil {
-		c.Ctx.Application().Logger().Errorf("UserController GetList失败。", err.Error())
+		c.Ctx.Application().Logger().Errorf("UserController GetList出错：", err.Error())
 		response.Error(c.Ctx, iris.StatusInternalServerError, response.OptionFailur, nil)
 		return
 	}
@@ -222,7 +222,7 @@ func (c *UserController) GetItem() {
 		response.Ok(c.Ctx, response.OptionSuccess, user)
 		return
 	} else {
-		c.Ctx.Application().Logger().Errorf("UserController GetItem失败。%s", user)
+		c.Ctx.Application().Logger().Errorf("UserController GetItem出错：%s", user)
 		response.Error(c.Ctx, iris.StatusInternalServerError, response.OptionFailur, nil)
 		return
 	}
@@ -238,16 +238,16 @@ func (c *UserController) PostSave() {
 	user := models.User{}
 
 	if err := c.Ctx.ReadJSON(&user); err != nil {
-		c.Ctx.Application().Logger().Errorf("UserController PostSave失败。", err.Error())
+		c.Ctx.Application().Logger().Errorf("UserController PostSave出错：", err.Error())
 		response.Error(c.Ctx, iris.StatusBadRequest, response.OptionFailur, nil)
 		return
 	}
 
 	user.CreateTime = time.Now()
-	effect, err2 := c.Service.Create(&user)
+	effect, err2 := c.Service.Update(&user, nil)
 
 	if effect <= 0 || err2 != nil {
-		c.Ctx.Application().Logger().Errorf("UserController PostSave失败。", err2.Error())
+		c.Ctx.Application().Logger().Errorf("UserController PostSave出错：", err2.Error())
 		response.Error(c.Ctx, iris.StatusBadRequest, response.OptionFailur, nil)
 		return
 	}
@@ -288,7 +288,7 @@ func (c *UserController) GetDelete() {
 	effect, err = c.Service.Delete(ids)
 
 	if effect <= 0 || err != nil {
-		c.Ctx.Application().Logger().Errorf("UserController PostDelete失败。", err.Error())
+		c.Ctx.Application().Logger().Errorf("UserController PostDelete出错：", err.Error())
 		response.Error(c.Ctx, iris.StatusBadRequest, response.OptionFailur, nil)
 		return
 	}

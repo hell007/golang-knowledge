@@ -61,6 +61,14 @@ func (d *UserDao) List(name string, p *page.Pagination) ([]models.User, int64, e
 	return list, count, err
 }
 
+// GetUsersByIds 获得用户
+func (d *UserDao) GetUsersByIds(ids []int, page *page.Pagination) ([]models.User, int64, error) {
+	users := make([]models.User, 0)
+	s := d.engine.In("id", ids).Limit(page.Limit, page.Start)
+	count, err := s.FindAndCount(&users)
+	return users, count, err
+}
+
 // Get
 func (d *UserDao) Get(id int) *models.User {
 	data := &models.User{Id: id}
@@ -87,7 +95,12 @@ func (d *UserDao) GetRoleNameByRId(rid int) (string, error) {
 
 // update
 func (d *UserDao) Update(user *models.User, columns []string) (int64, error) {
-	effect, err := d.engine.Id(user.Id).MustCols(columns...).Update(user)
+	if columns != nil && len(columns) > 0 {
+		effect, err := d.engine.Id(user.Id).MustCols(columns...).Update(user)
+		return effect, err
+	}
+
+	effect, err := d.engine.Id(user.Id).Update(user)
 	return effect, err
 }
 

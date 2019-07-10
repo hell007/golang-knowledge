@@ -1,7 +1,6 @@
 package page
 
 import (
-	"errors"
 	"github.com/kataras/iris"
 )
 
@@ -37,7 +36,9 @@ func NewPagination(ctx iris.Context) (*Pagination, error) {
 	sortOrder := ctx.URLParam("sortOrder")
 
 	if err1 != nil || err2 != nil {
-		return nil, errors.New("请求的分页参数解析错误.")
+		//return nil, errors.New("请求的分页参数解析错误.")
+		pageNumber = 1
+		pageSize = 10
 	}
 
 	page := Pagination{
