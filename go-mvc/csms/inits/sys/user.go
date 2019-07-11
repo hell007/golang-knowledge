@@ -7,7 +7,7 @@ import (
 	"github.com/kataras/golog"
 
 	"../../../framework/middleware/casbin"
-	system "../../../framework/models/system"
+	"../../../framework/models/system"
 	db "../../../framework/utils/datasource"
 	"../../../framework/utils/encrypt"
 )
@@ -30,6 +30,7 @@ func CheckRootExit() bool {
 
 		// 初始化rbac_model
 		r := system.User{Username: username}
+
 		if exit, _ := e.Get(&r); exit {
 			casbin.SetRbacModel(strconv.Itoa(r.Id))
 			CreateSystemRole()
@@ -43,6 +44,9 @@ func CreateRoot() {
 	newRoot := system.User{
 		Username:   username,
 		Password:   encrypt.AESEncrypt([]byte(password)),
+		Name:       "超级管理员",
+		RoleId:     1,
+		Enable:     1,
 		CreateTime: time.Now(),
 	}
 
@@ -57,6 +61,8 @@ func CreateRoot() {
 }
 
 func addAllpolicy(rooId string) {
+
+	rooId = "superadmin"
 	// add policy for root
 	e := casbin.GetEnforcer()
 	p := e.AddPolicy(rooId, "/*", "ANY", ".*", "", "", "", "", "", "超级用户")

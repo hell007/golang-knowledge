@@ -14,9 +14,8 @@ import (
 )
 
 type RoleController struct {
-	Ctx      iris.Context
-	Service  services.RoleService
-	UService services.UserService
+	Ctx     iris.Context
+	Service services.RoleService
 }
 
 // role/list?pageNumber=1&pageSize=2
@@ -149,7 +148,7 @@ FAIL:
 }
 
 // RelationUserRole 给用户指定角色
-func (c *RoleController) PostRelationUserRole() {
+func (c *RoleController) PostRelationuserrole() {
 	groupDef := new(casbin.GroupDefine)
 
 	if err := c.Ctx.ReadJSON(groupDef); err != nil {
@@ -205,7 +204,7 @@ func (c *RoleController) GetRoleuserlist() {
 		uids = append(uids, id)
 	}
 
-	list, total, err := c.UService.GetUsersByIds(uids, p)
+	list, total, err := services.NewUserService().GetUsersByIds(uids, p)
 
 	if err != nil {
 		c.Ctx.Application().Logger().Errorf("获取角色关联的用户表错误, %s", err.Error())
@@ -223,27 +222,34 @@ func (c *RoleController) GetRoleuserlist() {
 }
 
 // RoleMenuTable 角色菜单查询
-//func (c *RoleController) RoleMenuTable(rid int64) {
-//
-//	p, err := page.NewPagination(c.Ctx)
-//	if err != nil {
-//		c.Ctx.Application().Logger().Errorf("获取角色关联的菜单表错误: %s", err.Error())
-//		response.Error(c.Ctx, iris.StatusInternalServerError, response.OptionFailur, nil)
-//		return
-//	}
-//
-//	menus, total, err := c.Service.GetMenusByRoleid(rid, p)
-//	if err != nil {
-//		c.Ctx.Application().Logger().Errorf("获取角色关联的菜单表错误, %s, %v", err.Error(), menus)
-//		response.Error(c.Ctx, iris.StatusInternalServerError, response.OptionFailur, err.Error())
-//		return
-//	}
-//
-//	// 组装数据
-//	res := &page.Result{
-//		Total: total,
-//		Rows:  menus,
-//	}
-//	response.Ok(c.Ctx, response.OptionSuccess, res)
-//	return
-//}
+func (c *RoleController) GetRolemenulist() {
+	rid, err := c.Ctx.URLParamInt64("rid")
+	if err != nil {
+		c.Ctx.Application().Logger().Errorf("GetRolemenulist出错：%s", err.Error())
+		response.Error(c.Ctx, iris.StatusBadRequest, response.ParseParamsFailur, nil)
+		return
+	}
+
+	p, err := page.NewPagination(c.Ctx)
+	if err != nil {
+		c.Ctx.Application().Logger().Errorf("GetRolemenulist出错：%s", err.Error())
+		response.Error(c.Ctx, iris.StatusBadRequest, response.ParseParamsFailur, nil)
+		return
+	}
+
+	menus, total, err2 := services.NewMenuService().GetMenusByRoleid(rid, p)
+
+	if err2 != nil {
+		c.Ctx.Application().Logger().Errorf("GetRolemenulist出错：%s, %v", err2.Error(), menus)
+		response.Error(c.Ctx, iris.StatusInternalServerError, response.OptionFailur, err2.Error())
+		return
+	}
+
+	// 组装数据
+	res := &page.Result{
+		Total: total,
+		Rows:  menus,
+	}
+	response.Ok(c.Ctx, response.OptionSuccess, res)
+	return
+}

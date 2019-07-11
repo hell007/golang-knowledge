@@ -6,9 +6,9 @@ import (
 
 // RoleMenu  角色-菜单关联表
 type RoleMenu struct {
-	Id  int `xorm:"pk autoincr INT(10) notnull" json:"id"`
-	Rid int `xorm:"pk autoincr INT(10) notnull" json:"rid"`
-	Mid int `xorm:"pk autoincr INT(10) notnull" json:"mid"`
+	Id  int64 `xorm:"pk autoincr INT(10) notnull" json:"id"`
+	Rid int64 `xorm:"pk autoincr INT(10) notnull" json:"rid"`
+	Mid int64 `xorm:"pk autoincr INT(10) notnull" json:"mid"`
 }
 
 // CreateRoleMenu 建立角色菜单

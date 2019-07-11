@@ -9,7 +9,6 @@ import (
 var (
 	// 定义系统初始的角色
 	Components = [][]string{
-		{"superadmin", "/*", "GET|POST|DELETE|PUT", ".*"},
 		{"admin", "/sys/*", "GET|POST|DELETE|PUT", ".*"},
 		{"goods", "/goods*", "GET|POST|DELETE|PUT", ".*"},
 	}

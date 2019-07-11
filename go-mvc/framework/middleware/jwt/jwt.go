@@ -246,15 +246,17 @@ func ParseToken(ctx context.Context) (*models.UserToken, bool) {
 	mapClaims := (jwts.Get(ctx).Claims).(jwt.MapClaims)
 
 	id, ok1 := mapClaims["id"].(float64)
-	rolename, ok2 := mapClaims["rolename"].(string)
+	username, ok2 := mapClaims["username"].(string)
+	rolename, ok3 := mapClaims["rolename"].(string)
 
-	if !ok1 || !ok2 {
+	if !ok1 || !ok2 || !ok3 {
 		response.Error(ctx, iris.StatusInternalServerError, response.TokenParseFailur, nil)
 		return nil, false
 	}
 
 	ut := models.UserToken{
 		Id:       int(id),
+		Username: username,
 		Rolename: rolename,
 	}
 

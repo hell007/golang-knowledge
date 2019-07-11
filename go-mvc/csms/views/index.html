@@ -68,10 +68,21 @@
 <h2>5.刷新</h2>
 <button type="button" id="js-refresh">刷新</button></br></br></br>
 
+
 </br>
 </br>
 <h2>6.role</h2>
-<button type="button" id="js-role">role测试</button></br></br></br>
+<button type="button" id="js-role1">给用户指定角色</button></br></br></br>
+
+</br>
+</br>
+<h2>7.role</h2>
+<button type="button" id="js-role2">角色用户查询</button></br></br></br>
+
+</br>
+</br>
+<h2>8.role</h2>
+<button type="button" id="js-role3">角色菜单查询</button></br></br></br>
 
 
 <script src="assets/vendors/jquery/3.3.1/dist/jquery.min.js"></script>
@@ -278,11 +289,40 @@ $(function(){
     });
   });
 
-  // 7.role
-  $("#js-role").on("click", function(){
+  // 7.RelationUserRole 给用户指定角色
+  $("#js-role1").on("click", function(){
+
+    //超级用户组
+    let groupdefine = {
+      Uid: 89,
+      Sub:['admin','goods']
+    }
+
+    $.ajax({
+      type: "post",
+      url: "http://127.0.0.1:3000/sys/role/relationuserrole",
+      async:  true,
+      data: JSON.stringify(groupdefine),
+      cache: false,
+      dataType: "json",
+      success: function(res) {
+        console.log(res)
+      },
+      error: function(e) {
+        console.log(e)
+      },
+      beforeSend: function(request) {
+        request.setRequestHeader("Authorization", "bearer "+store.get("auth-token"));
+      }
+    });
+  });
+
+  // 7.RoleUserList  角色用户查询
+  $("#js-role2").on("click", function(){
     let query = {
       pageNumber: 1,
       pageSize: 10,
+      rKey: "89", // admin goods
     }
 
     const params = Object.keys(query)
@@ -291,8 +331,7 @@ $(function(){
 
     $.ajax({
       type: "get",
-      //url: "http://127.0.0.1:3000/sys/role/list?" + params,
-      url: "http://127.0.0.1:3000/sys/role/roleuserlist?rKey=/sys/*",
+      url: "http://127.0.0.1:3000/sys/role/roleuserlist?" + params,
       async:  true,
       cache: false,
       dataType: "json",
@@ -309,6 +348,35 @@ $(function(){
   });
 
 
+  // 8.RoleMenulist 角色菜单查询
+  $("#js-role3").on("click", function(){
+    let query = {
+      pageNumber: 1,
+      pageSize: 10,
+      rid: 4,
+    }
+
+    const params = Object.keys(query)
+            .map(key => query[key] && `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
+            .join('&');
+
+    $.ajax({
+      type: "get",
+      url: "http://127.0.0.1:3000/sys/role/rolemenulist?" + params,
+      async:  true,
+      cache: false,
+      dataType: "json",
+      success: function(res) {
+        console.log(res)
+      },
+      error: function(e) {
+        console.log(e)
+      },
+      beforeSend: function(request) {
+        request.setRequestHeader("Authorization", "bearer "+store.get("auth-token"));
+      }
+    });
+  });
   
 })
 </script>

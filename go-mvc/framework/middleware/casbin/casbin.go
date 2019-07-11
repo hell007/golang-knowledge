@@ -14,7 +14,7 @@ import (
 	db "../../../framework/utils/datasource"
 	"../../conf"
 	"../../utils/response"
-	jwt "../jwt"
+	"../jwt"
 )
 
 var (
@@ -93,9 +93,8 @@ func CheckPermissions(ctx context.Context) bool {
 		return false
 	}
 
-	//uid := strconv.Itoa(int(user.Id))
+	//uid := strconv.Itoa(int(ut.Id))
 	rolename := ut.Rolename
-
 	yes := GetEnforcer().Enforce(rolename, ctx.Path(), ctx.Method(), ".*")
 
 	if !yes {
