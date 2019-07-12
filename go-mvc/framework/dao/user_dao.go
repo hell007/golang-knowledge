@@ -8,7 +8,7 @@
 package dao
 
 import (
-	//"fmt"
+	"fmt"
 	//"github.com/go-xorm/core"
 	"github.com/go-xorm/xorm"
 
@@ -61,10 +61,10 @@ func (d *UserDao) List(name string, p *page.Pagination) ([]models.User, int64, e
 	return list, count, err
 }
 
-// GetUsersByIds 获得用户
-func (d *UserDao) GetUsersByIds(ids []int, page *page.Pagination) ([]models.User, int64, error) {
+// GetUsersByRids
+func (d *UserDao) GetUsersByRids(rids []int, page *page.Pagination) ([]models.User, int64, error) {
 	users := make([]models.User, 0)
-	s := d.engine.In("id", ids).Limit(page.Limit, page.Start)
+	s := d.engine.In("id", rids).Limit(page.Limit, page.Start)
 	count, err := s.FindAndCount(&users)
 	return users, count, err
 }
@@ -81,9 +81,13 @@ func (d *UserDao) Get(id int) *models.User {
 }
 
 // GetUserByName
-func (d *UserDao) GetUserByName(name string, user *models.User) (bool, error) {
-	//return d.engine.Get(user) name 错误仍然能查出
-	return d.engine.Where("username = ?", name).Get(user)
+func (d *UserDao) GetUserByName(name string, user *models.UserToken) (bool, error) {
+	sql := fmt.Sprintf(`
+SELECT USER.*, ROLE.ROLE_NAME AS ROLENAME, ROLE.ROLE_NOTE AS ROLENOTE FROM jie_user USER, jie_role ROLE 
+WHERE USER.USERNAME = "%s" AND USER.ROLE_ID = ROLE.ID
+`, name)
+	//d.engine.Where("username = ?", name).Get(user)
+	return d.engine.SQL(sql).Get(user)
 }
 
 // GetRoleNameById

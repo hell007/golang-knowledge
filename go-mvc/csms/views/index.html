@@ -294,13 +294,13 @@ $(function(){
 
     //超级用户组
     let groupdefine = {
-      Uid: 89,
-      Sub:['admin','goods']
+      Uid: 'superadmin',
+      Sub:['news','goods'] //{uid:admin,sub:['goods','news']}
     }
 
     $.ajax({
       type: "post",
-      url: "http://127.0.0.1:3000/sys/role/relationuserrole",
+      url: "http://127.0.0.1:3000/sys/rule/relationuserrole",
       async:  true,
       data: JSON.stringify(groupdefine),
       cache: false,
@@ -322,7 +322,7 @@ $(function(){
     let query = {
       pageNumber: 1,
       pageSize: 10,
-      rKey: "89", // admin goods
+      rKey: "admin", // superadmin admin goods news
     }
 
     const params = Object.keys(query)
@@ -331,7 +331,7 @@ $(function(){
 
     $.ajax({
       type: "get",
-      url: "http://127.0.0.1:3000/sys/role/roleuserlist?" + params,
+      url: "http://127.0.0.1:3000/sys/rule/roleuserlist?" + params,
       async:  true,
       cache: false,
       dataType: "json",
@@ -353,7 +353,7 @@ $(function(){
     let query = {
       pageNumber: 1,
       pageSize: 10,
-      rid: 4,
+      rid: 2,
     }
 
     const params = Object.keys(query)
@@ -362,7 +362,7 @@ $(function(){
 
     $.ajax({
       type: "get",
-      url: "http://127.0.0.1:3000/sys/role/rolemenulist?" + params,
+      url: "http://127.0.0.1:3000/sys/rule/rolemenulist?" + params,
       async:  true,
       cache: false,
       dataType: "json",

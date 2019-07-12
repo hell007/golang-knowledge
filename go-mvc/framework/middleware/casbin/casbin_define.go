@@ -14,7 +14,7 @@ type (
 
 	// GroupDefine 用户所属角色组
 	GroupDefine struct {
-		UID int64    `json:"uid"`
+		UID string   `json:"uid"` //uid设计为角色名称（string）， 而不是用户的id，避免了role id user id的区分
 		Sub []string `json:"sub"`
 	}
 )

@@ -50,6 +50,12 @@ func Configure(b *bootstrap.Bootstrapper) {
 		roleService := services.NewRoleService()
 		role.Register(roleService)
 		role.Handle(new(controllers.RoleController))
+
+		//系统casbinrule子模块
+		rule := mvc.New(sys.Party("/rule"))
+		ruleService := services.NewRuleService()
+		rule.Register(ruleService)
+		rule.Handle(new(controllers.RuleController))
 	}
 
 	//user := mvc.New(main.Party("/user"))

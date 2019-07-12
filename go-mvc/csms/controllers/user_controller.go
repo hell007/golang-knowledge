@@ -66,13 +66,13 @@ FAIL:
 // user/login
 func (c *UserController) PostLogin() {
 	var (
-		err        error
-		user       = new(models.User)
-		mUser      = new(models.User)
+		err  error
+		user = new(models.User)
+		//mUser      = new(models.User)
 		ut         = new(models.UserToken) //需要返回的组装user
 		ckPassword bool
-		rolename   string
-		token      string
+		//rolename   string
+		token string
 	)
 
 	if err = c.Ctx.ReadJSON(&user); err != nil {
@@ -81,8 +81,8 @@ func (c *UserController) PostLogin() {
 		return
 	}
 
-	mUser.Username = user.Username
-	has, err := c.Service.GetUserByName(user.Username, mUser)
+	ut.Username = user.Username
+	has, err := c.Service.GetUserByName(user.Username, ut)
 
 	if err != nil {
 		c.Ctx.Application().Logger().Errorf("用户[%s]登录失败。%s", user.Username, err.Error())
@@ -97,30 +97,15 @@ func (c *UserController) PostLogin() {
 	}
 
 	// 验证密码
-	ckPassword = encrypt.CheckPWD(user.Password, mUser.Password)
+	ckPassword = encrypt.CheckPWD(user.Password, ut.Password)
 	if !ckPassword {
 		response.Unauthorized(c.Ctx, response.PasswordFailur, nil)
 		return
 	}
 
-	// 查询角色
-	rolename, err = c.Service.GetRoleNameByRId(mUser.RoleId)
-	if err != nil {
-		response.Unauthorized(c.Ctx, response.PermissionsLess, nil)
-		return
-	}
-
-	// 组装前台需要数据
-	ut.Id = mUser.Id
-	ut.Username = mUser.Username
-	ut.Email = mUser.Email
-	ut.Mobile = mUser.Mobile
-	ut.RoleId = mUser.RoleId
-	ut.Rolename = rolename
-
 	// 生成token
 	token, err = jwt.GenerateToken(ut)
-	golog.Infof("用户[%s], 登录生成token [%s]", mUser.Username, token)
+	golog.Infof("用户[%s], 登录生成token [%s]", ut.Username, token)
 	if err != nil {
 		c.Ctx.Application().Logger().Errorf("用户[%s]登录，生成token出错。%s", user.Username, err.Error())
 		response.Error(c.Ctx, iris.StatusInternalServerError, response.TokenCreateFailur, nil)
@@ -128,6 +113,7 @@ func (c *UserController) PostLogin() {
 	}
 
 	ut.Token = token
+	ut.Password = ""
 	response.Ok(c.Ctx, response.LoginSuccess, ut)
 }
 

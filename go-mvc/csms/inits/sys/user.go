@@ -44,9 +44,10 @@ func CreateRoot() {
 	newRoot := system.User{
 		Username:   username,
 		Password:   encrypt.AESEncrypt([]byte(password)),
-		Name:       "超级管理员",
 		RoleId:     1,
 		Enable:     1,
+		Email:      "root@sina.com",
+		Mobile:     "13888888888",
 		CreateTime: time.Now(),
 	}
 
@@ -60,17 +61,16 @@ func CreateRoot() {
 	addAllpolicy(rooId)
 }
 
-func addAllpolicy(rooId string) {
-
-	rooId = "superadmin"
+func addAllpolicy(rootId string) {
+	rootId = "superadmin"
 	// add policy for root
 	e := casbin.GetEnforcer()
-	p := e.AddPolicy(rooId, "/*", "ANY", ".*", "", "", "", "", "", "超级用户")
+	p := e.AddPolicy(rootId, "/*", "ANY", ".*", "", "", "", "", "", "超级管理员")
 	if !p {
 		golog.Fatalf("初始化用户[%s]权限失败.", username)
 	}
 
 	for _, v := range Components {
-		e.AddGroupingPolicy(rooId, v[0])
+		e.AddGroupingPolicy(rootId, v[0])
 	}
 }

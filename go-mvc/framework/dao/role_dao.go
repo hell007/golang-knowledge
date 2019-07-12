@@ -17,10 +17,21 @@ func NewRoleDao(engine *xorm.Engine) *RoleDao {
 	}
 }
 
-// List
-func (d *RoleDao) List(p *page.Pagination) ([]models.CasbinRule, int64, error) {
+// GetAll
+func (d *RoleDao) GetAll() []models.Role {
+	datalist := make([]models.Role, 0)
+	err := d.engine.Desc("id").Find(&datalist)
+	if err != nil {
+		return datalist
+	} else {
+		return datalist
+	}
+}
 
-	list := make([]models.CasbinRule, 0)
+// List
+func (d *RoleDao) List(p *page.Pagination) ([]models.Role, int64, error) {
+
+	list := make([]models.Role, 0)
 
 	s := d.engine.Limit(p.Limit, p.Start)
 
@@ -30,8 +41,8 @@ func (d *RoleDao) List(p *page.Pagination) ([]models.CasbinRule, int64, error) {
 }
 
 // Get
-func (d *RoleDao) Get(id int64) *models.CasbinRule {
-	data := &models.CasbinRule{Id: id}
+func (d *RoleDao) Get(id int) *models.Role {
+	data := &models.Role{Id: id}
 	ok, err := d.engine.Get(data)
 	if ok && err == nil {
 		return data
@@ -41,7 +52,7 @@ func (d *RoleDao) Get(id int64) *models.CasbinRule {
 }
 
 // update
-func (d *RoleDao) Update(role *models.CasbinRule, columns []string) (int64, error) {
+func (d *RoleDao) Update(role *models.Role, columns []string) (int64, error) {
 	var (
 		err    error
 		effect int64
@@ -56,22 +67,22 @@ func (d *RoleDao) Update(role *models.CasbinRule, columns []string) (int64, erro
 }
 
 // insert
-func (d *RoleDao) Create(role *models.CasbinRule) (int64, error) {
-	effect, err := d.engine.Insert(role)
+func (d *RoleDao) Create(rule *models.Role) (int64, error) {
+	effect, err := d.engine.Insert(rule)
 	return effect, err
 }
 
 // delete
-func (d *RoleDao) Delete(ids []int64) (int64, error) {
+func (d *RoleDao) Delete(ids []int) (int64, error) {
 	var (
 		effect int64
 		err    error
 	)
 
-	cr := new(models.CasbinRule)
+	role := new(models.Role)
 
 	for _, v := range ids {
-		i, err1 := d.engine.Id(v).Delete(cr)
+		i, err1 := d.engine.Id(v).Delete(role)
 		effect += i
 		err = err1
 	}
