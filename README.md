@@ -68,7 +68,7 @@ go get github.com/go-xorm/xorm
 
 goxorm配置
 
-config
+github.com\go-xorm\cmd\xorm\templates\goxorm\config 进行配置
     
     lang=go
     genJson=1
