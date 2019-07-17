@@ -23,6 +23,8 @@
 
 [go-xorm](https://github.com/go-xorm/xorm)
 
+[golang-xorm库快速学习](https://www.jianshu.com/p/13d46e5d2d2a)
+
 需要在 go-xorm/ 
 
       git clone https://github.com/go-xorm/xorm.git
@@ -75,7 +77,7 @@ github.com\go-xorm\cmd\xorm\templates\goxorm\config 进行配置
     prefix=jie_ //重要
 
 
-接下来开始执行
+接下来在xorm/目录下，开始执行
 
     ./xorm reverse mysql root:admin@/jie?charset=utf8 ./templates/goxorm
 
