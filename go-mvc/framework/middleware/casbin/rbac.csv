@@ -1,5 +1,0 @@
-p, admin, /*, *
-p, anonymous, /login, *
-p, 2, /logout, *
-p, 2, /user/*, *
-
