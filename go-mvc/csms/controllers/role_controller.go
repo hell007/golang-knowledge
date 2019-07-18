@@ -35,7 +35,7 @@ func (c *RoleController) GetList() {
 	// 查询
 	list, total, err = c.Service.List(p)
 	if err != nil {
-		c.Ctx.Application().Logger().Errorf("RuleController GetList出错：", err.Error())
+		c.Ctx.Application().Logger().Errorf("RoleController GetList出错：", err.Error())
 		response.Error(c.Ctx, iris.StatusInternalServerError, response.OptionFailur, nil)
 		return
 	}

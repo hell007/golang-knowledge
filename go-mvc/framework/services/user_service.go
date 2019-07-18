@@ -16,13 +16,14 @@ import (
 
 type UserService interface {
 	GetAll() []models.User
-	List(name string, p *page.Pagination) ([]models.User, int64, error)
+	List(name string, status int, p *page.Pagination) ([]models.User, int64, error)
 	GetUsersByRids(rids []int, page *page.Pagination) ([]models.User, int64, error)
 	Get(id int) *models.User
 	GetUserByName(name string, user *models.UserToken) (bool, error)
-	Delete(ids []int) (int64, error)
 	Update(user *models.User, columns []string) (int64, error)
 	Create(user *models.User) (int64, error)
+	Delete(ids []int) (int64, error)
+	Close(ids []int) (int64, error)
 }
 
 type userService struct {
@@ -39,8 +40,8 @@ func (s *userService) GetAll() []models.User {
 	return s.dao.GetAll()
 }
 
-func (s *userService) List(name string, p *page.Pagination) ([]models.User, int64, error) {
-	return s.dao.List(name, p)
+func (s *userService) List(name string, status int, p *page.Pagination) ([]models.User, int64, error) {
+	return s.dao.List(name, status, p)
 }
 
 func (s *userService) Get(id int) *models.User {
@@ -65,4 +66,8 @@ func (s *userService) Create(user *models.User) (int64, error) {
 
 func (s *userService) Delete(ids []int) (int64, error) {
 	return s.dao.Delete(ids)
+}
+
+func (s *userService) Close(ids []int) (int64, error) {
+	return s.dao.Close(ids)
 }

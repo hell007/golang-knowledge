@@ -118,7 +118,7 @@ func (c *UserController) PostLogin() {
 }
 
 // user/loginout token过期
-func (c *UserController) GetLoginout() {
+func (c *UserController) PostLoginout() {
 
 	response.Ok(c.Ctx, response.LoginOutSuccess, nil)
 	return
@@ -153,6 +153,7 @@ func (c *UserController) GetList() {
 	var (
 		err      error
 		username string
+		status   int
 		p        *page.Pagination
 		res      *page.Result
 		list     []models.User
@@ -167,7 +168,8 @@ func (c *UserController) GetList() {
 
 	// 查询
 	username = c.Ctx.URLParam("name")
-	list, total, err = c.Service.List(username, p)
+	status, _ = c.Ctx.URLParamInt("status")
+	list, total, err = c.Service.List(username, status, p)
 	if err != nil {
 		c.Ctx.Application().Logger().Errorf("UserController GetList出错：", err.Error())
 		response.Error(c.Ctx, iris.StatusInternalServerError, response.OptionFailur, nil)
@@ -274,7 +276,53 @@ func (c *UserController) GetDelete() {
 	effect, err = c.Service.Delete(ids)
 
 	if effect <= 0 || err != nil {
-		c.Ctx.Application().Logger().Errorf("UserController PostDelete出错：", err.Error())
+		c.Ctx.Application().Logger().Errorf("UserController GetDelete出错：", err.Error())
+		response.Error(c.Ctx, iris.StatusBadRequest, response.OptionFailur, nil)
+		return
+	}
+
+	response.Ok(c.Ctx, response.OptionSuccess, nil)
+	return
+
+	// 参数错误
+FAIL:
+	response.Error(c.Ctx, iris.StatusBadRequest, response.ParseParamsFailur, nil)
+	return
+}
+
+func (c *UserController) GetClose() {
+	var (
+		err    error
+		id     string
+		idList = make([]string, 0)
+		ids    = make([]int, 0)
+		uid    int
+		effect int64
+	)
+
+	id = c.Ctx.URLParam("id")
+	idList = strings.Split(id, ",")
+	if len(idList) == 0 {
+		goto FAIL
+	}
+
+	for _, v := range idList {
+		if v == "" {
+			continue
+		}
+
+		uid, err = strconv.Atoi(v)
+		if err != nil {
+			goto FAIL
+		}
+
+		ids = append(ids, uid)
+	}
+
+	effect, err = c.Service.Close(ids)
+
+	if effect <= 0 || err != nil {
+		c.Ctx.Application().Logger().Errorf("UserController GetClose出错：", err.Error())
 		response.Error(c.Ctx, iris.StatusBadRequest, response.OptionFailur, nil)
 		return
 	}

@@ -84,6 +84,7 @@
 <h2>8.role</h2>
 <button type="button" id="js-role3">角色菜单查询</button></br></br></br>
 
+<a href="test.html">test</a>
 
 <script src="assets/vendors/jquery/3.3.1/dist/jquery.min.js"></script>
 <script src="assets/vendors/bootstrap/bootstrap.min.js"></script>
@@ -127,6 +128,9 @@ $(function(){
       pageNumber: 1,
       pageSize: 10,
       name: '',
+      status: 1,
+      sortName: 'createTime',
+      SortOrder: 'asc',
     }
 
     const params = Object.keys(query)
@@ -379,6 +383,7 @@ $(function(){
   });
   
 })
+
 </script>
 </body>
 </html>

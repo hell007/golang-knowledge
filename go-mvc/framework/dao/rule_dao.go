@@ -70,10 +70,6 @@ func (d *RuleDao) Delete(ids []int64) (int64, error) {
 
 	cr := new(models.CasbinRule)
 
-	for _, v := range ids {
-		i, err1 := d.engine.Id(v).Delete(cr)
-		effect += i
-		err = err1
-	}
+	effect, err = d.engine.In("id", ids).Delete(cr)
 	return effect, err
 }

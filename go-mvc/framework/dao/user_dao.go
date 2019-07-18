@@ -42,19 +42,19 @@ func (d *UserDao) GetAll() []models.User {
 }
 
 // List
-func (d *UserDao) List(name string, p *page.Pagination) ([]models.User, int64, error) {
-
+func (d *UserDao) List(name string, status int, p *page.Pagination) ([]models.User, int64, error) {
 	list := make([]models.User, 0)
 
-	s := d.engine.Where("username like ?", "%"+name+"%").Limit(p.Limit, p.Start)
-	if p.SortName != "" {
-		switch p.SortOrder {
-		case "asc":
-			s.Asc(p.SortName)
-		case "desc":
-			s.Desc(p.SortName)
-		}
-	}
+	s := d.engine.Omit("password").Where("username like ?", "%"+name+"%").And("status = ?", status).Limit(p.Limit, p.Start)
+
+	//if p.SortName != "" {
+	//	switch p.SortOrder {
+	//	case "asc":
+	//		s.Asc(p.SortName)
+	//	case "desc":
+	//		s.Desc(p.SortName)
+	//	}
+	//}
 
 	count, err := s.FindAndCount(&list)
 
@@ -123,10 +123,20 @@ func (d *UserDao) Delete(ids []int) (int64, error) {
 
 	u := new(models.User)
 
-	for _, v := range ids {
-		i, err1 := d.engine.Id(v).Delete(u)
-		effect += i
-		err = err1
-	}
+	effect, err = d.engine.In("id", ids).Delete(u)
+	return effect, err
+}
+
+// close
+func (d *UserDao) Close(ids []int) (int64, error) {
+	var (
+		effect int64
+		err    error
+	)
+
+	u := new(models.User)
+	u.Status = 0
+
+	effect, err = d.engine.In("id", ids).Cols("status").Update(u)
 	return effect, err
 }

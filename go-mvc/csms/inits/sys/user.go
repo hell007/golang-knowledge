@@ -45,7 +45,7 @@ func CreateRoot() {
 		Username:   username,
 		Password:   encrypt.AESEncrypt([]byte(password)),
 		RoleId:     1,
-		Enable:     1,
+		Status:     1,
 		Email:      "root@sina.com",
 		Mobile:     "13888888888",
 		CreateTime: time.Now(),

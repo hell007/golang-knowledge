@@ -81,10 +81,6 @@ func (d *DepDao) Delete(ids []int) (int64, error) {
 
 	dep := new(models.Dep)
 
-	for _, v := range ids {
-		i, err1 := d.engine.Id(v).Delete(dep)
-		effect += i
-		err = err1
-	}
+	effect, err = d.engine.In("id", ids).Delete(dep)
 	return effect, err
 }

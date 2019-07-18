@@ -81,10 +81,6 @@ func (d *RoleDao) Delete(ids []int) (int64, error) {
 
 	role := new(models.Role)
 
-	for _, v := range ids {
-		i, err1 := d.engine.Id(v).Delete(role)
-		effect += i
-		err = err1
-	}
+	effect, err = d.engine.In("id", ids).Delete(role)
 	return effect, err
 }
