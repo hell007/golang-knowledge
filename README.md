@@ -79,6 +79,8 @@ github.com\go-xorm\cmd\xorm\templates\goxorm\config 进行配置
 
 接下来在xorm/目录下，开始执行
 
+    目录 /usr/local/go/extends/src/github.com/go-xorm/cmd/xorm
+
     ./xorm reverse mysql root:admin@/jie?charset=utf8 ./templates/goxorm
 
 在/xorm/models/下生成
