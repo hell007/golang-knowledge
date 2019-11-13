@@ -19,6 +19,8 @@
 
 [go-sql-driver](https://github.com/go-sql-drive/mysql)
 
+[GoLand配置MySQL数据库](https://www.cnblogs.com/NolaLi/p/10738317.html)
+
 #### - orm操作数据库
 
 [go-xorm](https://github.com/go-xorm/xorm)
