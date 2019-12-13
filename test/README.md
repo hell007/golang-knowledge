@@ -179,3 +179,10 @@ exclude语句可以忽略依赖项模块
     replace google.golang.org/api => github.com/googleapis/google-api-go-client latest
     
 4、设置环境变量：GOPROXY=https://goproxy.io 可以使用代理，不仅能解决强，速度还很快！
+
+##### 2、go mod 里面 require 获取依赖版本不是最新的怎么办
+
+go mod 里面需要字自己去添加依赖，只要在项目里面 import 最新的版本， go mod 会自动添加最新依赖
+
+
+
