@@ -585,6 +585,62 @@ struct定义的时候是字段名与其类型一一对应，实际上Go支持只
 	}
 
 
+
+### reflect
+
+Go语言实现了反射，所谓反射就是能检查程序在运行时的状态
+
+ 	 t := reflect.TypeOf(i)
+
+得到类型的元数据,通过t我们能获取类型定义里面的所有元素
+
+	 v := reflect.ValueOf(i) 
+
+得到实际的值，通过v我们获取存储在里面的值，还可以去改变值
+
+
+	import (
+		"fmt"
+		"reflect"
+		"time"
+	)
+	
+	type Admin struct {
+		Id     int
+		Name   string
+		Phone  string
+		Status int
+		Time   int64
+	}
+	
+	func main() {
+	
+		//初始化
+		a := Admin{Id: 0, Name: "小曹", Phone: "13888888887", Status: 1, Time: 0}
+		fmt.Println("====", a)
+	
+		//get
+		v := reflect.ValueOf(a)
+		name := v.FieldByName("Name").String()
+		fmt.Println("===", name)
+	
+		//set
+		b := reflect.ValueOf(&a).Elem()
+		b.FieldByName("Id").SetInt(1000)
+		b.FieldByName("Name").SetString("曹操")
+		b.FieldByName("Phone").SetString("138888888888")
+		b.FieldByName("Time").SetInt(time.Now().Unix())
+		fmt.Println("====", a)
+	
+		//save
+		admin := Admin{}
+		admin.Id = 2000
+	
+		fmt.Println("admin===", admin)
+	}
+
+
+
 ### func 函数
 
 	func funcName(input1 type1, input2 type2) (output1 type1, output2 type2) {
@@ -1074,18 +1130,13 @@ Wait() 用来等待所有的操作结束，即计数变为 0，该函数会在�
 	}
 
 
-c、通道缓冲区
+c、通道缓冲区（Buffered Channels）
 
 通道可以设置缓冲区，通过 make 的第二个参数指定缓冲区大小：
 
-	ch := make(chan int, 100)
+	ch := make(chan int, value)
 
-
-带缓冲区的通道允许发送端的数据发送和接收端的数据获取处于异步状态，就是说发送端发送的数据可以放在缓冲区里面，可以等待接收端去获取数据，而不是立刻需要接收端去获取数据。
-
-不过由于缓冲区的大小是有限的，所以还是必须有接收端来接收数据的，否则缓冲区一满，数据发送端就无法再发送数据了。
-
-注意：如果通道不带缓冲，发送方会阻塞直到接收方从通道中接收了值。如果通道带缓冲，发送方则会阻塞直到发送的值被拷贝到缓冲区内；如果缓冲区已满，则意味着需要等待直到某个接收方获取到一个值。接收方在有值可以接收之前会一直阻塞。
+当 value = 0 时，channel 是无缓冲阻塞读写的，当value > 0 时，channel 有缓冲、是非阻塞的，直到写满 value 个元素才阻塞写入
 
 	func main() {
 		// 这里我们定义了一个可以存储整数类型的带缓冲通道
@@ -1102,14 +1153,23 @@ c、通道缓冲区
 		fmt.Println(<-ch)
 	}
 
+- 总结：
 
-d、Go 遍历通道与关闭通道
+channel使用的注意事项
 
-Go通过 range 关键字来实现遍历读取到的数据，类似于与数组或切片。格式如下：
+	channel中只能存放指定的数据类型
+	channle的数据放满后，就不能再放入了
+	如果从channel取出数据后，可以继续放入
+	在没有使用协程的情况下，如果channel数据取完了，再取，就会报dead lock
 
-	v, ok := <-ch
+- 注意：
 
-如果通道接收不到数据后 ok 就为 false，这时通道就可以使用 close() 函数来关闭。
+如果通道不带缓冲，发送方会阻塞直到接收方从通道中接收了值。如果通道带缓冲，发送方则会阻塞直到发送的值被拷贝到缓冲区内；如果缓冲区已满，则意味着需要等待直到某个接收方获取到一个值。接收方在有值可以接收之前会一直阻塞。
+
+
+d、Go 遍历通道与关闭通道（Range和Close）
+
+上面这个例子中，我们需要读取两次c，这样不是很方便，Go考虑到了这一点，所以也可以通过range关键字来实现遍历读取到的数据，像操作slice或者map一样操作缓存类型的channel，类似于与数组或切片。
 
 
 	func fibonacci(n int, c chan int) {
@@ -1129,8 +1189,81 @@ Go通过 range 关键字来实现遍历读取到的数据，类似于与数组�
 	    // 之后就结束了。如果上面的 c 通道不关闭，那么 range 函数就不
 	    // 会结束，从而在接收第 11 个数据的时候就阻塞了。
 	    for i := range c {
-	            fmt.Println(i)
+	    	fmt.Println(i)
 	    }
+	}
+
+for i := range c能够不断的读取channel里面的数据，直到该channel被显式的关闭。上面代码我们看到可以显式的关闭channel，生产者通过内置函数close关闭channel。关闭channel之后就无法再发送任何数据了，在消费方可以通过语法v, ok := <-ch测试channel是否被关闭。如果ok返回false，那么说明channel已经没有任何数据并且已经被关闭。
+
+- 注意：
+
+记住应该在生产者的地方关闭channel，而不是消费的地方去关闭它，这样容易引起panic;
+
+另外记住一点的就是channel不像文件之类的，不需要经常去关闭，只有当你确实没有任何发送数据了，或者你想显式的结束range循环之类的;
+
+
+e、Select
+
+上面介绍的都是只有一个channel的情况，那么如果存在多个channel的时候，该如何操作呢，Go里面提供了一个关键字select，通过select可以监听channel上的数据流动。
+
+
+select默认是阻塞的，只有当监听的channel中有发送或接收可以进行时才会运行，当多个channel都准备好的时候，select是随机的选择一个执行的。
+
+	func fibonacci(c, quit chan int) {
+	    x, y := 1, 1
+	    for {
+	        select {
+	        case c <- x:
+	            x, y = y, x + y
+	        case <-quit:
+	            fmt.Println("quit")
+	            return
+	        }
+	    }
+	}
+	
+	func main() {
+	    c := make(chan int)
+	    quit := make(chan int)
+	    go func() {
+	        for i := 0; i < 10; i++ {
+	            fmt.Println(<-c)
+	        }
+	        quit <- 0
+	    }()
+	    fibonacci(c, quit)
+	}
+
+在select里面还有default语法，select其实就是类似switch的功能，default就是当监听的channel都没有准备好的时候，默认执行的（select不再阻塞等待channel）。
+
+	select {
+	case i := <-c:
+	    // use i
+	default:
+	    // 当c阻塞的时候执行这里
+	}
+
+
+- 超时
+
+有时候会出现goroutine阻塞的情况，那么如何避免整个程序进入阻塞的情况呢？我们可以利用select来设置超时，通过如下的方式实现：
+
+	func main() {
+	    c := make(chan int)
+	    o := make(chan bool)
+	    go func() {
+	        for {
+	            select {
+	                case v := <- c:
+	                    println(v)
+	                case <- time.After(5 * time.Second):
+	                    println("timeout")
+	                    o <- true
+	                    break
+	            }
+	        }
+	    }()
+	    <- o
 	}
 
 
@@ -1175,55 +1308,3 @@ Go语言中有种不错的设计，即延迟（defer）语句，你可以在函�
 	}
 
 
-### reflect
-
-Go语言实现了反射，所谓反射就是能检查程序在运行时的状态
-
- 	 t := reflect.TypeOf(i)
-
-得到类型的元数据,通过t我们能获取类型定义里面的所有元素
-
-	 v := reflect.ValueOf(i) 
-
-得到实际的值，通过v我们获取存储在里面的值，还可以去改变值
-
-
-	import (
-		"fmt"
-		"reflect"
-		"time"
-	)
-	
-	type Admin struct {
-		Id     int
-		Name   string
-		Phone  string
-		Status int
-		Time   int64
-	}
-	
-	func main() {
-	
-		//初始化
-		a := Admin{Id: 0, Name: "小曹", Phone: "13888888887", Status: 1, Time: 0}
-		fmt.Println("====", a)
-	
-		//get
-		v := reflect.ValueOf(a)
-		name := v.FieldByName("Name").String()
-		fmt.Println("===", name)
-	
-		//set
-		b := reflect.ValueOf(&a).Elem()
-		b.FieldByName("Id").SetInt(1000)
-		b.FieldByName("Name").SetString("曹操")
-		b.FieldByName("Phone").SetString("138888888888")
-		b.FieldByName("Time").SetInt(time.Now().Unix())
-		fmt.Println("====", a)
-	
-		//save
-		admin := Admin{}
-		admin.Id = 2000
-	
-		fmt.Println("admin===", admin)
-	}
