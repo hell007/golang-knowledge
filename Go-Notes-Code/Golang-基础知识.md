@@ -1046,29 +1046,75 @@ Go内置有一个error类型，专门用来处理错误信息，Go的package里�
 
 a、goroutine
 
-Go语言支持并发，我们只需要通过 go 关键字来开启 goroutine 即可。goroutine（协程）是轻量级线程，goroutine 的调度是由 Golang 运行时进行管理的。
+goroutine是Go并行设计的核心。goroutine说到底其实就是协程，但是它比线程更小，十几个goroutine可能体现在底层就是五六个线程，Go语言内部帮你实现了这些goroutine之间的内存共享。
 
-goroutine 语法格式：
+执行goroutine只需极少的栈内存(大概是4~5KB)，当然会根据相应的数据伸缩。也正因为如此，可同时运行成千上万个并发任
+务。goroutine比thread更易用、更高效、更轻便。
+
+goroutine并不会运行得比线程更快更快，它只是增加了更多的并发性。当一个goroutine被阻塞（比如等待IO），golang的scheduler会调度其它可以执行的goroutine运行。与线程相比，它有以下几个优点：
+
+1）、内存消耗更少：
+
+Goroutine所需要的内存通常只有2kb，而线程则需要1Mb（500倍）。
+
+2）、创建与销毁的开销更小
+
+由于线程创建时需要向操作系统申请资源，并且在销毁时将资源归还，因此它的创建和销毁的开销比较大。相比之下，goroutine的创建和销毁是由go语言在运行时自己管理的，因此开销更低。
+
+3）、切换开销更小
+
+这是goroutine和线程的主要区别，也是golang能够实现高并发的主要原因。线程的调度方式是抢占式的，如果一个线程的执行时间超过了分配给它的时间片，就会被其它可执行的线程抢占。在线程切换的过程中需要保存/恢复所有的寄存器信息，比如16个通用寄存器，PC（Program Counter），SP（Stack Pointer），段寄存器等等
+
+goroutine是通过Go的runtime管理的一个线程管理器。goroutine通过go关键字实现了，就是一个普通的函数：
 
 	go 函数名( 参数列表 )
 
-Go允许使用 go 语句开启一个新的运行期线程， 即 goroutine，以一个不同的、新创建的 goroutine 来执行一个函数。 同一个程序中的所有 goroutine 共享同一个地址空间
+    import (
+        "fmt"
+        "runtime"
+    )
+    
+    // goroutine的简单使用
+    func say(s string) {
+        for i := 0; i < 5; i++ {
+            runtime.Gosched()
+            fmt.Println(s)
+        }
+    }
+    
+    func main() {
+        go say("world") //开一个新的Goroutines执行
+        say("hello") //当前Goroutines执行
+    }
+    
+    // 以上程序执行后将输出的结果是变化的	
+
+上面的多个goroutine运行在同一个进程里面，共享内存数据，不过设计上我们要遵循：不要通过共享来通信，而要通过通信来共享。
 
 
 b、通道（channel）
 
-通道（channel）是用来传递数据的一个数据结构。
+通道（channel）是用来传递数据的一个数据结构。不同goroutine之间通讯。
 
-通道可用于两个 goroutine 之间通过传递一个指定类型的值来同步运行和通讯。操作符 <- 用于指定通道的方向，发送或接收。如果未指定方向，则为双向通道。
+    全局变量的互斥锁
+    使用管道channel来解决
+
+channle本质就是一个数据结构-队列，数据是先进先出【FIFO : first in first out】；
+线程安全，多goroutine访问时，不需要加锁，就是说channel本身就是线程安全的；
+channel有类型的，一个string的channel只能存放string类型数据。
+
+goroutine运行在相同的地址空间，因此访问共享内存必须做好同步。Go提供了一个很好的goroutine之间进行数据的通信的机制channel。channel可以与Unix shell 中的双向管道做类比：可以通过它发送或者接收值。这些值只能是特定的类型：channel类型。定义一个channel时，也需要定义发送到channel的值的类型。注意，必须使用make 创建channel：
+
+    ci := make(chan int)
+    cs := make(chan string)
+    cf := make(chan interface{})
+
+channel通过操作符 <- 指定通道的方向，来接收和发送数据。如果未指定方向，则为双向通道。
 
 	ch <- v    // 把 v 发送到通道 ch
-	v := <-ch  // 从 ch 接收数据
-	           // 并把值赋给 v
+	v := <-ch  // 从 ch 接收数据 并把值赋给 v
 
-注意：默认情况下，通道是不带缓冲区的。发送端发送数据，同时必须有接收端相应的接收数据。
-
-
-- 用途：管道实现同步
+- 用途：多个goroutine之间实现同步
 
 这种方式是一种比较完美的解决方案， goroutine / channel 它们也是在 go 里面经常搭配在一起的一对.
 
@@ -1095,6 +1141,10 @@ b、通道（channel）
 			}
 		}
 	}
+
+默认情况下，channel接收和发送数据都是阻塞的，除非另一端已经准备好，这样就使得Goroutines同步变的更加的简单，而不需要显式的lock。所谓阻塞，也就是如果读取（value := <-ch）它将会被阻塞，直到有数据接收。其次，任何发送（ch<-5）将会被阻塞，直到数据被读出。无缓冲channel是在多个goroutine之间同步很棒的工具。
+
+注意：默认情况下，通道是不带缓冲区的。发送端发送数据，同时必须有接收端相应的接收数据。
 
 
 - go 里面也提供了更简单的方式 —— 使用 sync.WaitGroup。
@@ -1171,7 +1221,7 @@ d、Go 遍历通道与关闭通道（Range和Close）
 
 上面这个例子中，我们需要读取两次c，这样不是很方便，Go考虑到了这一点，所以也可以通过range关键字来实现遍历读取到的数据，像操作slice或者map一样操作缓存类型的channel，类似于与数组或切片。
 
-
+    // 生成者
 	func fibonacci(n int, c chan int) {
 	    x, y := 0, 1
 	    for i := 0; i < n; i++ {
@@ -1181,9 +1231,13 @@ d、Go 遍历通道与关闭通道（Range和Close）
 	    close(c)
 	}
 	
+	//消费方
 	func main() {
 	    c := make(chan int, 10)
 	    go fibonacci(cap(c), c)
+	    //_, ok := <-c
+        //fmt.Println(ok)
+        	
 	    // range 函数遍历每个从通道接收到的数据，因为 c 在发送完 10 个
 	    // 数据之后就关闭了通道，所以这里我们 range 函数在接收到 10 个数据
 	    // 之后就结束了。如果上面的 c 通道不关闭，那么 range 函数就不
