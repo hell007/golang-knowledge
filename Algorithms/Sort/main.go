@@ -13,7 +13,11 @@ import (
 
 	//"Algorithms/Sort/merge"
 
-	"Algorithms/Sort/bucket"
+	//"Algorithms/Sort/bucket"
+
+	//"Algorithms/Sort/radix"
+
+	"Algorithms/Sort/counting"
 
 	"Algorithms/Sort/utils"
 	"fmt"
@@ -51,8 +55,14 @@ func main() {
 	//fmt.Println("--归并排序--")
 	//merge.Sort(list)
 
-	fmt.Println("--桶排序--")
-	bucket.Sort(list)
+	//fmt.Println("--桶排序--")
+	//bucket.Sort(list)
+
+	//fmt.Println("--基数排序--")
+	//radix.Sort(list)
+
+	fmt.Println("--计数排序--")
+	counting.Sort(list)
 	
 	log.Println("排序后数组=", list)
 }
