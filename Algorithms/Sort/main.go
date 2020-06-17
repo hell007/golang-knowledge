@@ -14,6 +14,7 @@ import (
 	//"Algorithms/Sort/merge"
 
 	"Algorithms/Sort/bucket"
+
 	"Algorithms/Sort/utils"
 	"fmt"
 	"log"
@@ -52,5 +53,6 @@ func main() {
 
 	fmt.Println("--桶排序--")
 	bucket.Sort(list)
+	
 	log.Println("排序后数组=", list)
 }

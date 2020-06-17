@@ -37,17 +37,19 @@ func Sort(arr []int) []int {
 	length := len(arr)
 	if length < 2 { return arr}
 
-	// 获取最大值
+	// 1、获取最大值
 	max := getMax(arr)
-	// 新建桶数组
+
+	// 2、新建桶数组
 	bucket := make([]int, max+1)
 	sortedIndex := 0
 
-	// 以待排序数组的值为桶的键，进行统计
+	// 3、将待排序数组的值为桶的键，进行统计
 	for i:=0; i<length; i++ {
 		bucket[arr[i]] += 1
 	}
-	// 将桶的数据输出
+
+	// 4、将桶的数据输出
 	for j:=0; j<=max; j++ {
 		for bucket[j] > 0 {
 			arr[sortedIndex] = j
