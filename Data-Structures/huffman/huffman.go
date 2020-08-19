@@ -101,7 +101,7 @@ func NewHuffmanTree(text string) *Tree {
 	return &Tree{Root: &nodes[0]}
 }
 
-// 加码
+// 编码
 func (tree *Tree) Encode(text string) (string, error) {
 	if tree.Root == nil {
 		return "", errors.New("tree root cannot be nil")
