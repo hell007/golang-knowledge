@@ -25,6 +25,7 @@ func main() {
 	for range ch {
 		// 每次从ch中接收数据，表明一个活动的协程结束
 		count--
+		fmt.Println("count==", count)
 		// 当所有活动的协程都结束时，关闭管道
 		if count == 0 {
 			close(ch)
