@@ -7,8 +7,8 @@ import (
 )
 
 /**
-	go实现协程池管理
- */
+go实现协程池管理
+*/
 
 type Productor struct {
 	Jobs chan *Job
@@ -54,13 +54,13 @@ func (c Productor)AddData(data *Job){
 //异步开启多个work去处理任务，但是所有work执行完毕才会退出程序
 func (c Consumer)disposeData(data chan *Job){
 	//for i:=0; i<=c.PoolSize; i++{
-		c.Wg.Add(c.PoolSize)
-		go func() {
-			defer func() {
-				c.Wg.Done()
-			}()
-			c.Handler(data)
+	c.Wg.Add(c.PoolSize)
+	go func() {
+		defer func() {
+			c.Wg.Done()
 		}()
+		c.Handler(data)
+	}()
 	//}
 	c.Wg.Wait()
 }
