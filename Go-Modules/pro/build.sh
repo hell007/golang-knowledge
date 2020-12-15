@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 项目地址，/go 在 GOPATH 里面
-baseProjectDir="D:/Dev/cygwin/work/golang/golang-csms-system/o-mvc/csms"
+baseProjectDir="D:/Dev/cygwin/work/golang/golang-csms-system/go-mvc/csms"
 
 # targetDir 编译后的二进制文件目录
 targetDir="bin"
