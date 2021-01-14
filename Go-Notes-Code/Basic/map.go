@@ -24,12 +24,18 @@ func main() {
 	numbers["ten"] = 10 //赋值
 	numbers["three"] = 3
 
+	for _, v := range numbers {
+		fmt.Println(v)
+	}
+
+	fmt.Println(numbers)
+
 	fmt.Println("第三个数字是: ", numbers["three"]) // 读取数据
 	// 打印出来如:第三个数字是: 3
 
 	//map过程中需要注意的几点：
 
-	//map是无序的，每次打印出来的map都会不一样，它不能通过index获取，而必须通过key获取
+	//map默认是无序的，不管是按照 key 还是按照 value 默认都不排序
 
 	//map的长度是不固定的，也就是和slice一样，也是一种引用类型
 
