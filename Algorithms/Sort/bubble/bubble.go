@@ -17,11 +17,11 @@ package bubble
 //优化后的冒泡排序
 func Sort(arr []int) []int {
 
-	for count := len(arr)-1; ; count-- {
+	for count := len(arr) - 1; ; count-- {
 		//下一次判断是否发生交换，没交换，说明已经有序
 		swap := false
 
-		for i := 1; i<=count; i++ {
+		for i := 1; i <= count; i++ {
 			if arr[i-1] > arr[i] {
 				arr[i-1], arr[i] = arr[i], arr[i-1]
 				swap = true

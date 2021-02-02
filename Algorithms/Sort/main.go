@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"Algorithms/Sort/bubble"
+	"Algorithms/Sort/bubble"
 	//"Algorithms/Sort/quick"
 
 	//"Algorithms/Sort/shell"
@@ -17,7 +17,7 @@ import (
 
 	//"Algorithms/Sort/radix"
 
-	"Algorithms/Sort/counting"
+	//"Algorithms/Sort/counting"
 
 	"Algorithms/Sort/utils"
 	"fmt"
@@ -39,8 +39,8 @@ func main() {
 	//shell.Sort(list)
 
 	// --交换排序--
-	//fmt.Println("--冒泡排序--")
-	//bubble.Sort(list)
+	fmt.Println("--冒泡排序--")
+	bubble.Sort(list)
 
 	//fmt.Println("--快速排序--")
 	//quick.Sort(list)
@@ -61,8 +61,8 @@ func main() {
 	//fmt.Println("--基数排序--")
 	//radix.Sort(list)
 
-	fmt.Println("--计数排序--")
-	counting.Sort(list)
-	
+	//fmt.Println("--计数排序--")
+	//counting.Sort(list)
+
 	log.Println("排序后数组=", list)
 }

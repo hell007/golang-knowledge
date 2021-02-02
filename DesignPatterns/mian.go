@@ -1,5 +1,6 @@
 package main
 
+//https://blog.csdn.net/weixin_40165163/article/list/3?
 import (
 	"./AdapterPattern"
 	"./Bridge"
