@@ -3,7 +3,7 @@ package main
 import "fmt"
  
 //字符串匹配
-func catch(a, b string) bool {
+func sundaySearch(a, b string) bool {
 	i := 0
 	j := 0
 	for i < len(a) {
@@ -39,6 +39,6 @@ func catch(a, b string) bool {
 func main() {
 	a := "abcdef"
 	b := "bcd"
-	result := catch(a, b)
+	result := sundaySearch(a, b)
 	fmt.Println(result)
 }
