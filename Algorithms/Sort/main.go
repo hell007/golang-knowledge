@@ -1,26 +1,33 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:39:20
+ */
 package main
 
 import (
-	"Algorithms/Sort/bubble"
+	"golang-knowledge/Algorithms/Sort/bubble"
 	//"Algorithms/Sort/quick"
 
-	//"Algorithms/Sort/shell"
-	//"Algorithms/Sort/binaryInsert"
-	//"Algorithms/Sort/insert"
+	//"golang-knowledge/Algorithms/Sort/shell"
+	//"golang-knowledge/Algorithms/Sort/binaryInsert"
+	//"golang-knowledge/Algorithms/Sort/insert"
 
-	//"Algorithms/Sort/selection"
-	//"Algorithms/Sort/heap"
+	//"golang-knowledge/Algorithms/Sort/selection"
+	//"golang-knowledge/Algorithms/Sort/heap"
 
-	//"Algorithms/Sort/merge"
+	//"golang-knowledge/Algorithms/Sort/merge"
 
-	//"Algorithms/Sort/bucket"
+	//"golang-knowledge/Algorithms/Sort/bucket"
 
-	//"Algorithms/Sort/radix"
+	//"golang-knowledge/Algorithms/Sort/radix"
 
-	//"Algorithms/Sort/counting"
+	//"golang-knowledge/Algorithms/Sort/counting"
 
-	"Algorithms/Sort/utils"
 	"fmt"
+	"golang-knowledge/Algorithms/Sort/utils"
 	"log"
 )
 

@@ -1,8 +1,15 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:38:56
+ */
 package topological
 
 import (
-	"github.com/hell007/golang-knowledge/Data-Structures/graph"
-	"github.com/hell007/golang-knowledge/Data-Structures/stack"
+	"golang-knowledge/Data-Structures/graph"
+	"golang-knowledge/Data-Structures/stack"
 )
 
 //拓扑排序指的是将有向无环图（又称“DAG”图）中的顶点按照图中指定的先后顺序进行排序。

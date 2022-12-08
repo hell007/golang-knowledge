@@ -1,8 +1,15 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:41:20
+ */
 package topological
 
 import (
 	"fmt"
-	"github.com/hell007/golang-knowledge/Data-Structures/graph"
+	"golang-knowledge/Data-Structures/graph"
 	"testing"
 )
 

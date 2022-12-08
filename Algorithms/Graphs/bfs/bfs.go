@@ -1,8 +1,15 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:10:34
+ */
 package bfs
 
-import "github.com/hell007/golang-knowledge/Data-Structures/graph"
+import "golang-knowledge/Data-Structures/graph"
 
-//有向图的广度优先搜索
+// 有向图的广度优先搜索
 func Bfs(g *graph.DirGraph, start graph.VertexId, fn func(graph.VertexId)) {
 	queue := []graph.VertexId{start}
 	visited := make(map[graph.VertexId]bool)

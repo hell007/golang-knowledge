@@ -1,8 +1,15 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:38:03
+ */
 package dijkstra
 
 import (
-	"github.com/hell007/golang-knowledge/Data-Structures/graph"
-	"github.com/hell007/golang-knowledge/Data-Structures/priority_queue"
+	"golang-knowledge/Data-Structures/graph"
+	"golang-knowledge/Data-Structures/priority_queue"
 )
 
 //迪杰斯特拉算法计算的是从网中一个顶点到其它顶点之间的最短路径问题

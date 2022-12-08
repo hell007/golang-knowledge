@@ -1,10 +1,17 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:38:40
+ */
 package kosaraju
 
 import (
 	"fmt"
-	"github.com/hell007/golang-knowledge/Algorithms/graphs/dfs"
-	"github.com/hell007/golang-knowledge/Data-Structures/graph"
-	"github.com/hell007/golang-knowledge/Data-Structures/stack"
+	"golang-knowledge/Algorithms/graphs/dfs"
+	"golang-knowledge/Data-Structures/graph"
+	"golang-knowledge/Data-Structures/stack"
 )
 
 func Scc(g *graph.DirGraph) []stack.Stack {

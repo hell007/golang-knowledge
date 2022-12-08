@@ -1,8 +1,8 @@
 package hashTables
 
 import (
-	list "Data-Structures/linked-List"
 	"errors"
+	list "golang-knowledge/Data-Structures/linked-List"
 	"math"
 )
 
@@ -19,7 +19,7 @@ type item struct {
 
 func New(cap int) *HashTable {
 	table := make(map[int]*list.List, cap)
-	return &HashTable{Table:table, Size:0, Capacity:cap}
+	return &HashTable{Table: table, Size: 0, Capacity: cap}
 }
 
 // Horner's Method to hash string of length L (O(L))
@@ -32,16 +32,16 @@ func hashCode(str string) int {
 	return int(math.Abs(float64(hash)))
 }
 
-//散列函数，又称为哈希（Hash函数）
+// 散列函数，又称为哈希（Hash函数）
 func (ht *HashTable) position(str string) int {
-	return  hashCode(str) % ht.Capacity
+	return hashCode(str) % ht.Capacity
 }
 
 func (ht *HashTable) find(index int, key string) (*item, error) {
 	l := ht.Table[index]
 	var val *item
 
-	l.Each(func(node list.Node){
+	l.Each(func(node list.Node) {
 		if node.Value.(*item).key == key {
 			val = node.Value.(*item)
 		}

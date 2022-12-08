@@ -1,9 +1,17 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:30:40
+ */
 package bfs
 
 import (
-	"github.com/hell007/golang-knowledge/Data-Structures/graph"
-	"github.com/stretchr/testify/assert"
+	"golang-knowledge/Data-Structures/graph"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBfs(t *testing.T) {

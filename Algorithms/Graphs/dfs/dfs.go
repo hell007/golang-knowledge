@@ -1,8 +1,15 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:37:41
+ */
 package dfs
 
 import (
-	"github.com/hell007/golang-knowledge/Data-Structures/graph"
-	"github.com/hell007/golang-knowledge/Data-Structures/stack"
+	"golang-knowledge/Data-Structures/graph"
+	"golang-knowledge/Data-Structures/stack"
 )
 
 //无向图的深度搜索
@@ -27,7 +34,7 @@ func UndirectedDfs(g *graph.UnGraph, v graph.VertexId, fn func(graph.VertexId)) 
 	}
 }
 
-//有向图的深度搜索
+// 有向图的深度搜索
 func DirectedDfs(g *graph.DirGraph, v graph.VertexId, fn func(graph.VertexId)) {
 	s := stack.New()
 	s.Push(int(v))

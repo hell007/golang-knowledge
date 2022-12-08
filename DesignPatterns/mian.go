@@ -1,14 +1,22 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:16:09
+ */
 package main
 
 //https://blog.csdn.net/weixin_40165163/article/list/3?
 import (
-	"./AdapterPattern"
-	"./Bridge"
-	"./BuilderPattern"
-	"./FactoryPattern"
-	"./FilterPattern"
-	"./SingletonPattern"
 	"fmt"
+	"golang-knowledge/DesignPatterns/AdapterPattern"
+
+	"golang-knowledge/DesignPatterns/Bridge"
+	"golang-knowledge/DesignPatterns/BuilderPattern"
+	"golang-knowledge/DesignPatterns/FactoryPattern"
+	"golang-knowledge/DesignPatterns/FilterPattern"
+	"golang-knowledge/DesignPatterns/SingletonPattern"
 )
 
 // 抽象工厂
@@ -18,7 +26,7 @@ func testAbstractFactory() {
 	color.Fill()
 }
 
-//单例
+// 单例
 func testSingleton() {
 	s1 := SingletonPattern.GetInstance1()
 	s1.Count = 5
@@ -33,7 +41,7 @@ func testSingleton() {
 	fmt.Println(s4)
 }
 
-//建造者
+// 建造者
 func testBuilderPattern() {
 	builder := new(BuilderPattern.ComputerBuilder)
 	director := BuilderPattern.Director{Builder: builder}
@@ -41,7 +49,7 @@ func testBuilderPattern() {
 	fmt.Println(*computer)
 }
 
-//适配器
+// 适配器
 func testAdapterPattern() {
 	audioPlayer := AdapterPattern.AudioPlayer{}
 
@@ -51,7 +59,7 @@ func testAdapterPattern() {
 	audioPlayer.Play("avi", "mind me.avi")
 }
 
-//过滤器
+// 过滤器
 func testFilterPattern() {
 	var persons []FilterPattern.Person
 	persons = append(persons, FilterPattern.GetPerson("Robert", "Male", "Single"))

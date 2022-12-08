@@ -1,8 +1,15 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:32:56
+ */
 package stackList
 
 import (
-	stack "Data-Structures/stack/stack-list"
 	"fmt"
+	stack "golang-knowledge/Data-Structures/stack/stack-list"
 	"testing"
 )
 

@@ -1,8 +1,15 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:37:18
+ */
 package bfs_shortest_path
 
 import (
-	"github.com/hell007/golang-knowledge/Algorithms/graphs/bfs"
-	"github.com/hell007/golang-knowledge/Data-Structures/graph"
+	"golang-knowledge/Algorithms/graphs/bfs"
+	"golang-knowledge/Data-Structures/graph"
 )
 
 func ShortestPath(g *graph.DirGraph, start graph.VertexId) (dist map[graph.VertexId]int) {

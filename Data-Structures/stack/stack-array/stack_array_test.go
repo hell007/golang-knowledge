@@ -1,9 +1,16 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:32:40
+ */
 package stackArray
 
 import (
-	stack "Data-Structures/stack/stack-array"
 	"errors"
 	"fmt"
+	stack "golang-knowledge/Data-Structures/stack/stack-array"
 	"strconv"
 	"testing"
 )
@@ -19,7 +26,7 @@ func TestStack(t *testing.T) {
 	// Test Push
 	for i := 0; i < 10; i++ {
 		err := s.Push("stack-array" + strconv.Itoa(i))
-		if err!= nil {
+		if err != nil {
 			errors.New("stack push error")
 		}
 	}
@@ -29,15 +36,11 @@ func TestStack(t *testing.T) {
 	fmt.Println("s.Len==", len)
 
 	// Test Top
-	m,err := s.Top()
+	m, err := s.Top()
 	fmt.Println("s.Top==", m, err)
 
 	// Test Pop
-	n,err := s.Pop()
+	n, err := s.Pop()
 	fmt.Println("s.Pop==", n, err)
-
-
-
-
 
 }

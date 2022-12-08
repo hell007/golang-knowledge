@@ -1,9 +1,16 @@
+/*
+ * @Descripttion:
+ * @Author: zenghua.wang
+ * @Date: 2021-02-21 21:29:33
+ * @LastEditors: zenghua.wang
+ * @LastEditTime: 2022-12-08 14:32:21
+ */
 package priorityQueue
 
 import (
-	"Data-Structures/heap"
-	"Data-Structures/queue"
 	"errors"
+	"golang-knowledge/Data-Structures/heap"
+	"golang-knowledge/Data-Structures/queue"
 )
 
 type Item struct {
@@ -82,22 +89,3 @@ func (q *PriorityQueue) ChangePriority(v interface{}, priority int) {
 		q.data.Push(storage.Shift().(heap.Item))
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
